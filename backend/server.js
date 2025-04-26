@@ -11,20 +11,19 @@ const lastfm = new LastFM('6afb6561ded89f457d4cfbba34329bae', {
 // Dropdown menu options
 app.get('/api/chartOptions', (req, res) => {
     const chartOptions = [
-        { value: 'Artists', label: 'Top Artists' },
-        { value: 'Tracks', label: 'Top Tracks' },
-        { value: 'Albums', label: 'Top Albums' },
+        { value: 'artists', label: 'Top Artists' },
+        { value: 'tracks', label: 'Top Tracks' },
+        { value: 'albums', label: 'Top Albums' },
     ];
     res.json(chartOptions);
 });
 
 app.get('/api/timeOptions', (req, res) => {
     const timeOptions = [
-        { value: '7day', label: 'Last Week' },
+        { value: '7days', label: 'Last Week' },
         { value: '1month', label: 'Last Month' },
-        { value: '6month', label: 'Last 6 Months' },
-        { value: '12month', label: 'Last Year' },
-        { value: 'overall', label: 'Overall' },
+        { value: '6months', label: 'Last 6 Months' },
+        { value: '12months', label: 'Last Year' },
     ];
     res.json(timeOptions);
 });
