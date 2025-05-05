@@ -1,12 +1,14 @@
 import React from "react";
 import './App.css';
 import "98.css";
+import axios from "axios";
 
 const App = () => {
 
   const [username, setUsername] = React.useState("");
   const [timespan, setTimespan] = React.useState("");
   const [category, setCategory] = React.useState("");
+  const [charts, setCharts] = React.useState([]);
 
   const changeUsername = (event) => {
     const writtenUsername = event.target.value;
@@ -23,8 +25,19 @@ const App = () => {
     setCategory(selectedCategory);
   }
 
-  const generateChart = (event) => {
+  const generateChart = async (event) => {
     event.preventDefault();
+
+    try {
+        const response = await axios.get('http://localhost:5000/generate_chart', {
+            params: {
+                username: username,
+                timespan: timespan,
+                category: category
+            }
+        });
+    }
+
     console.log(username, timespan, category);
   }
 
