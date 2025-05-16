@@ -50,7 +50,7 @@ const Form = ({
       <fieldset>
         <legend>Timespan</legend>
         <div className="field-row">
-          <input id="7days" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "7days"} />
+          <input id="7days" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "7day"} />
           <label htmlFor="7days">Last week</label>
         </div>
         <div className="field-row">
@@ -58,11 +58,11 @@ const Form = ({
           <label htmlFor="1month">Last month</label>
         </div>
         <div className="field-row">
-          <input id="6months" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "6months"} />
+          <input id="6months" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "6month"} />
           <label htmlFor="6months">6 months</label>
         </div>
         <div className="field-row">
-          <input id="12months" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "12months"} />
+          <input id="12months" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "12month"} />
           <label htmlFor="12months">Last year</label>
         </div>
       </fieldset>
@@ -93,13 +93,15 @@ const Form = ({
 }
 
 const Charts = ({ charts }) => {
+  console.log('Charts recebidos:', charts);
   return (
     <div> 
       {charts && charts.length > 0 ? (
         <div>
-          {charts.map((chart, index) => (
-            <div key={index}>
-              {/*TODO: handle chart rendering */}
+          {charts.map((chart) => (
+            <div key={chart.mbid}>
+              <h3>{chart.name}</h3>
+              <p>Playcount: {chart.playcount}</p>
             </div>
           ))}
         </div>
@@ -126,16 +128,18 @@ const App = () => {
     try {
       let url = '';
 
+      const baseUrl = 'http://localhost:4000';
+
       switch (category) {
         case 'artists':
-          url = `/top-artists/${username}`;
-          break
+          url = `${baseUrl}/top-artists/${username}`;
+          break;
         case 'albums':
-          url = `/top-albums/${username}`;
-          break
+          url = `${baseUrl}/top-albums/${username}`;
+          break;
         case 'tracks':
-          url = `/top-tracks/${username}`;
-          break
+          url = `${baseUrl}/top-tracks/${username}`;
+          break;
       }
 
       axios.get(url, {

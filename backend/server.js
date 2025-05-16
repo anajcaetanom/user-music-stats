@@ -16,7 +16,6 @@ const baseUrl = 'https://ws.audioscrobbler.com/2.0/';
 async function getUserTopArtists(
     username,
     limit = 10,
-    page = 1,
     period
 ) {
     try {
@@ -27,7 +26,6 @@ async function getUserTopArtists(
                 api_key: LASTFM_API_KEY,
                 format: 'json',
                 limit,
-                page,
                 period
             }
         });
@@ -43,7 +41,6 @@ async function getUserTopArtists(
 async function getUserTopAlbums(
     username,
     limit = 10,
-    page = 1,
     period 
 ) {
     try {
@@ -54,7 +51,6 @@ async function getUserTopAlbums(
                 api_key: LASTFM_API_KEY,
                 format: 'json',
                 limit,
-                page,
                 period
             }
         });
@@ -70,7 +66,6 @@ async function getUserTopAlbums(
 async function getUserTopTracks(
     username,
     limit = 10,
-    page = 1,
     period
 ) {
     try {
@@ -81,7 +76,6 @@ async function getUserTopTracks(
                 api_key: LASTFM_API_KEY,
                 format: 'json',
                 limit,
-                page,
                 period
             }
         });
@@ -99,44 +93,41 @@ async function getUserTopTracks(
 
 app.get('/top-artists/:username', async (req, res) => {
     const username = req.params.username;
-    const { limit = 10, page = 1, period } = req.query;
+    const { limit = 10, period = '7day' } = req.query;
 
-    const topArtists = await getUserTopArtists(
+    const data = await getUserTopArtists(
         username,
         limit,
-        page,
         period
     );
 
-    res.json(topArtists);
+    res.json(data);
 });
 
 app.get('/top-albums/:username', async (req, res) => {
     const username = req.params.username;
-    const { limit = 10, page = 1, period } = req.query;
+    const { limit = 10, period } = req.query;
 
-    const topAlbums =  await getUserTopAlbums(
+    const data =  await getUserTopAlbums(
         username,
         limit,
-        page,
         period
     );
 
-    res.json(topAlbums);
+    res.json(data);
 });
 
 app.get('/top-tracks/:username', async (req, res) => {
     const username = req.params.username;
-    const { limit = 10, page = 1, period } = req.query;
+    const { limit = 10, period } = req.query;
 
-    const topTracks = await getUserTopTracks(
+    const data = await getUserTopTracks(
         username,
         limit,
-        page,
         period
     );
 
-    res.json(topTracks);
+    res.json(data);
 });
 
 
