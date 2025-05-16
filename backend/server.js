@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 
 const app = express();
@@ -43,6 +43,7 @@ async function getUserTopArtists(
 async function getUserTopAlbums(
     username,
     limit = 10,
+    page = 1,
     period 
 ) {
     try {
@@ -96,7 +97,7 @@ async function getUserTopTracks(
 
 ///////////// Routes /////////////
 
-app.get('/top-artists/:username', async (req, res) {
+app.get('/top-artists/:username', async (req, res) => {
     const username = req.params.username;
     const { limit = 10, page = 1, period } = req.query;
 
@@ -108,4 +109,38 @@ app.get('/top-artists/:username', async (req, res) {
     );
 
     res.json(topArtists);
-})
+});
+
+app.get('/top-albums/:username', async (req, res) => {
+    const username = req.params.username;
+    const { limit = 10, page = 1, period } = req.query;
+
+    const topAlbums =  await getUserTopAlbums(
+        username,
+        limit,
+        page,
+        period
+    );
+
+    res.json(topAlbums);
+});
+
+app.get('/top-tracks/:username', async (req, res) => {
+    const username = req.params.username;
+    const { limit = 10, page = 1, period } = req.query;
+
+    const topTracks = await getUserTopTracks(
+        username,
+        limit,
+        page,
+        period
+    );
+
+    res.json(topTracks);
+});
+
+
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

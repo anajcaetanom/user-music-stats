@@ -84,7 +84,7 @@ const Form = ({
       </fieldset>
 
       <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '8px' }}>
-        <button type="submit">
+        <button type="submit" aria-label="submit" disabled={ !username || !timespan || !category }>
           Generate Chart
         </button>
       </div>
@@ -120,18 +120,40 @@ const App = () => {
   const [category, setCategory] = React.useState("");
   const [charts, setCharts] = React.useState([]);
 
-  const generateChart = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/generate_chart', {
-        username: username,
-        timespan: timespan,
-        category: category
-      });
-      setCharts(response.data);
-      console.log(response.data);
+      let url = '';
+
+      switch (category) {
+        case 'artists':
+          url = `/top-artists/${username}`;
+          break
+        case 'albums':
+          url = `/top-albums/${username}`;
+          break
+        case 'tracks':
+          url = `/top-tracks/${username}`;
+          break
+      }
+
+      axios.get(url, {
+        params: {
+          period: timespan,
+          limit: 10
+        }
+      })
+      .then(res => {
+        console.log(res.data);
+        setCharts(res.data);
+      })
+      .catch(err => {
+        console.error(err)
+      })
+
       setShowResults(true);
+
     } catch (error) {
       if (error.response) {
         console.error('Resposta do servidor com erro:', error.response.data);
@@ -155,7 +177,7 @@ const App = () => {
             <p>Loading...</p>
           ) : !showResults ? (
             <Form 
-              onSubmit={generateChart}
+              onSubmit={handleSubmit}
               username={username}
               setUsername={setUsername}
               timespan={timespan}
@@ -167,7 +189,6 @@ const App = () => {
             <Charts charts={charts} />
           )}
         </div>
-
       </div>
     </div>
   )};
