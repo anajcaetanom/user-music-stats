@@ -39,4 +39,7 @@
 .window {
   width: 300px;
   z-index: 2;
+  max-height: 90vh;
+  overflow-y: auto;
 }
+

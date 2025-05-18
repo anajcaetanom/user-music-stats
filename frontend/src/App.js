@@ -3,15 +3,24 @@ import './App.css';
 import "98.css";
 import axios from "axios";
 
+// teste
+import jsonData from './jucaetanom.json'
+//
 
-const TitleBar = () => {
+const TitleBar = ({ showResults, setShowResults }) => {
+  const backButton = () => {
+    setShowResults(false)
+  }
+
   return (
     <div className="title-bar">
       <div className="title-bar-text">LastFM Stats</div>
       <div className="title-bar-controls">
-        <button aria-label="Minimize" />
-        <button aria-label="Maximize" />
-        <button aria-label="Close" />
+        <button 
+          aria-label="Close" 
+          disabled={!showResults} 
+          onClick={backButton}
+        />
       </div>
     </div>
   )
@@ -93,16 +102,15 @@ const Form = ({
 }
 
 const Charts = ({ charts }) => {
-  console.log('Charts recebidos:', charts);
   return (
     <div> 
       {charts && charts.length > 0 ? (
-        <div>
+        <div> 
           {charts.map((chart) => (
-            <div key={chart.mbid}>
-              <h3>{chart.name}</h3>
-              <p>Playcount: {chart.playcount}</p>
-            </div>
+            <ul key={chart.mbid} class="tree-view">
+              <li><strong>{chart.name}</strong></li>
+              <li>Playcount: {chart.playcount}</li>
+            </ul>
           ))}
         </div>
       ) : (
@@ -122,6 +130,7 @@ const App = () => {
   const [category, setCategory] = React.useState("");
   const [charts, setCharts] = React.useState([]);
 
+  /*
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -171,17 +180,36 @@ const App = () => {
       setIsLoading(false);
     }
   };
+  */
 
+  // teste
+  const submitTest = async (event) => {
+    event.preventDefault(); 
+    setIsLoading(true);
+    try {
+      const data = jsonData.artist
+      setCharts(data)
+      setShowResults(true);
+    } catch (error) {
+      console.error('Erro ao carregar o arquivo JSON:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+ 
   return (
     <div className="background">
       <div className="window">
-        <TitleBar />
+        <TitleBar 
+          showResults={showResults}
+          setShowResults={setShowResults}
+        />
         <div className="window-body">
           {isLoading ? (
             <p>Loading...</p>
           ) : !showResults ? (
             <Form 
-              onSubmit={handleSubmit}
+              onSubmit={submitTest}
               username={username}
               setUsername={setUsername}
               timespan={timespan}
