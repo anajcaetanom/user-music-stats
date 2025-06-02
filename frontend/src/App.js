@@ -27,20 +27,20 @@ const TitleBar = ({ showResults, setShowResults }) => {
 }
 
 const ChooseSource = ({
-
+  source, 
+  setSource
 }) => {
-
-  const [source, SetSource] = React.useState("")
-
   return (
-    <div>
-      <button onClick={SetSource("spotify")}>
+    <div className="center">
+      <button onClick={() => setSource("spotify")}>
         Spotify
       </button>
+      <button onClick={() => setSource("lastfm")}>
+        LastFM
+      </button>
     </div>
-  )
-  
-  }}
+  ) 
+}
 
 const Form = ({
   onSubmit,
@@ -141,6 +141,7 @@ const App = () => {
   const [timespan, setTimespan] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [charts, setCharts] = React.useState([]);
+  const [source, setSource] = React.useState("")
 
   /*
   const handleSubmit = async (event) => {
@@ -208,7 +209,8 @@ const App = () => {
       setIsLoading(false);
     }
   };
- 
+  /////////
+
   return (
     <div className="background">
       <div className="window">
@@ -220,15 +222,21 @@ const App = () => {
           {isLoading ? (
             <p>Loading...</p>
           ) : !showResults ? (
-            <Form 
-              onSubmit={submitTest}
-              username={username}
-              setUsername={setUsername}
-              timespan={timespan}
-              setTimespan={setTimespan}
-              category={category}
-              setCategory={setCategory}
-            />
+            <div>
+              <ChooseSource
+                source={source}
+                setSource={setSource}
+              />
+              <Form 
+                onSubmit={submitTest}
+                username={username}
+                setUsername={setUsername}
+                timespan={timespan}
+                setTimespan={setTimespan}
+                category={category}
+                setCategory={setCategory}
+              />
+            </div>
           ) : (
             <Charts charts={charts} />
           )}
