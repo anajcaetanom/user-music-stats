@@ -26,6 +26,22 @@ const TitleBar = ({ showResults, setShowResults }) => {
   )
 }
 
+const ChooseSource = ({
+
+}) => {
+
+  const [source, SetSource] = React.useState("")
+
+  return (
+    <div>
+      <button onClick={SetSource("spotify")}>
+        Spotify
+      </button>
+    </div>
+  )
+  
+  }}
+
 const Form = ({
   onSubmit,
   username,
@@ -51,11 +67,7 @@ const Form = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <div style={{ paddingBottom: '8px' }} className="field-row">
-        <label htmlFor="lastfm_username">LastFM User</label>
-        <input id="lastfm_username" type="text" value={username} onChange={changeUsername} required />
-      </div>
-
+      
       <fieldset>
         <legend>Timespan</legend>
         <div className="field-row">
@@ -187,7 +199,7 @@ const App = () => {
     event.preventDefault(); 
     setIsLoading(true);
     try {
-      const data = jsonData.artist
+      const data = jsonData
       setCharts(data)
       setShowResults(true);
     } catch (error) {
