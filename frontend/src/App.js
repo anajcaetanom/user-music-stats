@@ -143,6 +143,14 @@ const App = () => {
   const [charts, setCharts] = React.useState([]);
   const [source, setSource] = React.useState("")
 
+  const spotifyAuth = async (event) => {
+
+    const clientId = 'colocar_aqui_client_id';
+    const redirectURI = 'http://127.0.0.1:4000/callback' // ver se o callback é front ou back
+    const scopes = 
+
+  }
+
   /*
   const handleSubmit = async (event) => {
     event.preventDefault();
