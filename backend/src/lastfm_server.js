@@ -1,13 +1,10 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const axios = require('axios');
 
-const PORT = 4000;
-const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
+const router = express.Router();
 
-const app = express();
-app.use(cors()); // Allow all origins (good for development)
+const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 
 const baseUrl = 'https://ws.audioscrobbler.com/2.0/';
 
@@ -91,7 +88,7 @@ async function getUserTopTracks(
 
 ///////////// Routes /////////////
 
-app.get('/top-artists/:username', async (req, res) => {
+router.get('/top-artists/:username', async (req, res) => {
     const username = req.params.username;
     const { limit = 10, period = '7day' } = req.query;
 
@@ -104,7 +101,7 @@ app.get('/top-artists/:username', async (req, res) => {
     res.json(data);
 });
 
-app.get('/top-albums/:username', async (req, res) => {
+router.get('/top-albums/:username', async (req, res) => {
     const username = req.params.username;
     const { limit = 10, period } = req.query;
 
@@ -117,7 +114,7 @@ app.get('/top-albums/:username', async (req, res) => {
     res.json(data);
 });
 
-app.get('/top-tracks/:username', async (req, res) => {
+router.get('/top-tracks/:username', async (req, res) => {
     const username = req.params.username;
     const { limit = 10, period } = req.query;
 
@@ -130,8 +127,4 @@ app.get('/top-tracks/:username', async (req, res) => {
     res.json(data);
 });
 
-
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+module.exports = router;

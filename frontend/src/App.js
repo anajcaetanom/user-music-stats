@@ -1,13 +1,22 @@
-import React from "react";
 import './App.css';
 import "98.css";
 import axios from "axios";
 
+import { useAppContext } from "./context/AppContext";
+
+import { LastFmForm, LastFmHandleSubmit } from './LastFM';
+import { SpotifyForm, SpotifyHandleSubmit } from './Spotify'
+
 // teste
-import jsonData from './jucaetanom.json'
+// import jsonData from './jucaetanom.json'
 //
 
-const TitleBar = ({ showResults, setShowResults }) => {
+const TitleBar = () => {
+  const {
+    showResults, 
+    setShowResults
+  } = useAppContext();
+
   const backButton = () => {
     setShowResults(false)
   }
@@ -26,13 +35,26 @@ const TitleBar = ({ showResults, setShowResults }) => {
   )
 }
 
-const ChooseSource = ({
-  source, 
-  setSource
-}) => {
+const ChooseSource = () => {
+  const {
+    setSource
+  } = useAppContext();
+
+  const handleSpotifyClick = () => {
+    setSource("spotify");
+
+    const baseUrl = process.env.REACT_APP_BACKEND_URL;
+    const url = `${baseUrl}/spotify/auth`
+
+    axios.get(url)
+      .catch(error => {
+        console.error("Error during Spotify authentication request:", error);
+      });
+  }
+
   return (
     <div className="center">
-      <button onClick={() => setSource("spotify")}>
+      <button onClick={handleSpotifyClick}>
         Spotify
       </button>
       <button onClick={() => setSource("lastfm")}>
@@ -42,86 +64,25 @@ const ChooseSource = ({
   ) 
 }
 
-const Form = ({
-  onSubmit,
-  username,
-  setUsername,
-  timespan,
-  setTimespan,
-  category,
-  setCategory,
-}) => {
+const Charts = () => {
+  const {
+    charts, 
+    source
+  } = useAppContext();
 
-  const changeUsername = (event) => {
-    const writtenUsername = event.target.value;
-    setUsername(writtenUsername);
-  }
-  const changeTimespan = (event) => {
-    const selectedTimespan = event.target.id;
-    setTimespan(selectedTimespan);
-  }
-  const changeCategory = (event) => {
-    const selectedCategory = event.target.id;
-    setCategory(selectedCategory);
-  }
+  const data = source === "spotify" ? charts.items : charts;
 
-  return (
-    <form onSubmit={onSubmit}>
-      
-      <fieldset>
-        <legend>Timespan</legend>
-        <div className="field-row">
-          <input id="7days" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "7day"} />
-          <label htmlFor="7days">Last week</label>
-        </div>
-        <div className="field-row">
-          <input id="1month" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "1month"} required />
-          <label htmlFor="1month">Last month</label>
-        </div>
-        <div className="field-row">
-          <input id="6months" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "6month"} />
-          <label htmlFor="6months">6 months</label>
-        </div>
-        <div className="field-row">
-          <input id="12months" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "12month"} />
-          <label htmlFor="12months">Last year</label>
-        </div>
-      </fieldset>
-      <div style={{ height: '8px'}} className="spacer"></div>
-      <fieldset>
-        <legend>Category</legend>
-        <div className="field-row">
-          <input id="tracks" type="radio" name="category" onChange={changeCategory} checked={category === "tracks"} />
-          <label htmlFor="tracks">Top Tracks</label>
-        </div>
-        <div className="field-row">
-          <input id="artists" type="radio" name="category" onChange={changeCategory} checked={category === "artists"} required />
-          <label htmlFor="artists">Top Artists</label>
-        </div>
-        <div className="field-row">
-          <input id="albums" type="radio" name="category" onChange={changeCategory} checked={category === "albums"} />
-          <label htmlFor="albums">Top Albums</label>
-        </div>
-      </fieldset>
-
-      <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '8px' }}>
-        <button type="submit" aria-label="submit" disabled={ !username || !timespan || !category }>
-          Generate Chart
-        </button>
-      </div>
-    </form>
-  )
-}
-
-const Charts = ({ charts }) => {
   return (
     <div> 
-      {charts && charts.length > 0 ? (
+      {data && data.length > 0 ? (
         <div> 
-          {charts.map((chart) => (
-            <ul key={chart.mbid} class="tree-view">
-              <li><strong>{chart.name}</strong></li>
-              <li>Playcount: {chart.playcount}</li>
+          {data.map((chart, index) => (
+
+            <ul key={chart.id || chart.mbid} className="tree-view">
+              <li><strong>{index + 1}{chart.name}</strong></li>
+              {source === "lastfm" && (
+                <li>Playcount: {chart.playcount}</li> 
+              )} 
             </ul>
           ))}
         </div>
@@ -134,76 +95,50 @@ const Charts = ({ charts }) => {
   );
 };
 
+const HomeButton = () => {
+  const {
+    setShowResults,
+    setIsLoading,
+    setUsername,
+    setTimespan,
+    setCategory,
+    setCharts,
+    setSource,
+  } = useAppContext();
+
+  const resetValues = () => {
+    setShowResults(false);
+    setIsLoading(false);
+    setUsername('');
+    setTimespan('');
+    setCategory('');
+    setCharts([]);
+    setSource('');
+  };
+
+  return (
+    <div className='center'>
+      <button onClick={resetValues}>
+        Return to Home
+      </button>
+    </div>
+  );
+};
+
+const Logout = () => {
+  const baseUrl = process.env.REACT_APP_BACKEND_URL;
+  const url = `${baseUrl}/spotify/logout`
+  axios.get(url)
+}
+
 const App = () => {
-  const [showResults, setShowResults] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [username, setUsername] = React.useState("");
-  const [timespan, setTimespan] = React.useState("");
-  const [category, setCategory] = React.useState("");
-  const [charts, setCharts] = React.useState([]);
-  const [source, setSource] = React.useState("")
-
-  const spotifyAuth = async (event) => {
-
-    const clientId = 'colocar_aqui_client_id';
-    const redirectURI = 'http://127.0.0.1:4000/callback' // ver se o callback é front ou back
-    const scopes = 
-
-  }
+  const {
+    showResults,
+    isLoading,
+    source,
+  } = useAppContext();
 
   /*
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
-    try {
-      let url = '';
-
-      const baseUrl = 'http://localhost:4000';
-
-      switch (category) {
-        case 'artists':
-          url = `${baseUrl}/top-artists/${username}`;
-          break;
-        case 'albums':
-          url = `${baseUrl}/top-albums/${username}`;
-          break;
-        case 'tracks':
-          url = `${baseUrl}/top-tracks/${username}`;
-          break;
-      }
-
-      axios.get(url, {
-        params: {
-          period: timespan,
-          limit: 10
-        }
-      })
-      .then(res => {
-        console.log(res.data);
-        setCharts(res.data);
-      })
-      .catch(err => {
-        console.error(err)
-      })
-
-      setShowResults(true);
-
-    } catch (error) {
-      if (error.response) {
-        console.error('Resposta do servidor com erro:', error.response.data);
-        console.error('Código do erro:', error.response.status);
-      } else if (error.request) {
-        console.error('A requisição foi feita, mas não houve resposta', error.request);
-      } else {
-        console.error('Erro ao configurar a requisição', error.message);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  */
-
-  // teste
   const submitTest = async (event) => {
     event.preventDefault(); 
     setIsLoading(true);
@@ -217,42 +152,55 @@ const App = () => {
       setIsLoading(false);
     }
   };
-  /////////
+  */
+
+  function renderSourceForm(source) {
+    switch (source) {
+      case "spotify":
+        return <SpotifyForm 
+          onSubmit={SpotifyHandleSubmit}
+        />
+      case "lastfm":
+        return <LastFmForm 
+          onSubmit={LastFmHandleSubmit}
+        />
+      default:
+        return <p>Source error.</p>
+    }
+  }
 
   return (
     <div className="background">
       <div className="window">
-        <TitleBar 
-          showResults={showResults}
-          setShowResults={setShowResults}
-        />
+        <TitleBar />
         <div className="window-body">
           {isLoading ? (
-            <p>Loading...</p>
-          ) : !showResults ? (
             <div>
-              <ChooseSource
-                source={source}
-                setSource={setSource}
-              />
-              <Form 
-                onSubmit={submitTest}
-                username={username}
-                setUsername={setUsername}
-                timespan={timespan}
-                setTimespan={setTimespan}
-                category={category}
-                setCategory={setCategory}
-              />
+              <p>Loading...</p>
+              <HomeButton />
             </div>
+          ) : !showResults ? (
+            !source ? (
+              <div>
+                <ChooseSource />
+              </div>
+            ) : (
+              <div>
+                {renderSourceForm(source)}
+                <HomeButton />
+              </div>
+            )
           ) : (
-            <Charts charts={charts} />
+            <div>
+              <Charts />
+              <HomeButton />
+              <Logout />
+            </div>
           )}
         </div>
       </div>
     </div>
   )};
-
 
 
 export default App;
