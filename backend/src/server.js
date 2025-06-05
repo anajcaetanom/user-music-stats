@@ -12,6 +12,18 @@ const lastfmRoutes = require('./lastfm_server');
 
 app.use(cors({
     origin: process.env.FRONTEND_URI,
+    credentials: true,
+}));
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+        maxAge: 60 * 60 * 1000
+    }
 }));
 
 app.use(express.json());
@@ -27,16 +39,6 @@ app.get('/', (req, res) => {
     res.send('API funcionando: Spotify + LastFM');
 });
 
-app.use(session({
-    secret: 'shhh_nao_grita',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        httpOnly: true,
-        secure: false,
-        maxAge: 60 * 60 * 1000
-    }
-}));
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);

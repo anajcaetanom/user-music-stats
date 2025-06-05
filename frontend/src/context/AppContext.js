@@ -26,7 +26,7 @@ export const AppProvider = ({ children }) => {
       charts,
       setCharts,
       source,
-      setSource
+      setSource,
     }}>
       {children}
     </AppContext.Provider>

@@ -8,24 +8,6 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirectURI = process.env.REDIRECT_URI;
 
-////////// Spotify Request //////////
-
-async function getUserTopData(accessToken, type, time_range, limit = 10) {
-    const response = await axios.get(`https://api.spotify.com/v1/me/top/${type}`, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`, 
-        },
-        params: {
-            time_range,
-            limit,
-        }
-    });
-
-    return response.data
-}
-
-///////////// Routes /////////////
-
 // get code
 router.get('/auth', (req, res) => {
     const scopes = ['user-top-read'];
@@ -76,16 +58,51 @@ router.get('/callback', async (req, res) => {
         //     expires_in
         // });
 
-        req.redirect(`${process.env.FRONTEND_URI}`)
+        res.redirect(`${process.env.FRONTEND_URI}?spotifyAuth=success`)
 
     } catch (error) {
-        console.error(error.response.data);
-        res.status(500).send('Error in code-token exchange.')
+        console.error("Erro ao trocar o code por token do Spotify:");
+
+        if (error.response) {
+            console.error("Status:", error.response.status);
+            console.error("Data:", error.response.data);
+        } else if (error.request) {
+            console.error("Sem resposta da API:", error.request);
+        } else {
+            console.error("Erro desconhecido:", error.message);
+        }
+
+        res.status(500).send('Error in code-token exchange.');
     }
 });
 
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).send('Couldnt logout.')
+        }
+        res.clearCookie('connect.sid');
+        res.sendStatus(200);
+    });
+});
+
+async function getUserTopData(accessToken, type, time_range, limit = 10) {
+    const response = await axios.get(`https://api.spotify.com/v1/me/top/${type}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`, 
+        },
+        params: {
+            time_range,
+            limit,
+        }
+    });
+
+    return response.data
+}
+
 router.get('/top/:type', async (req, res) => {
     const accessToken = req.session.accessToken;
+    console.log('Sessão:', req.session);
     if (!accessToken) {
         return res.status(401).send('Acesss token is missing.');
     }
@@ -104,16 +121,6 @@ router.get('/top/:type', async (req, res) => {
         console.error(error.response?.data || error.message);
         res.status(500).send(`Error fetching top ${type}`);
     }
-});
-
-router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).send('Couldnt logout.')
-        }
-        res.clearCookie('connect.sid');
-        res.sendStatus(200);
-    });
 });
 
 module.exports = router;

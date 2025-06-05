@@ -1,11 +1,12 @@
+import { useEffect } from 'react';
 import './App.css';
 import "98.css";
 import axios from "axios";
 
 import { useAppContext } from "./context/AppContext";
 
-import { LastFmForm, LastFmHandleSubmit } from './LastFM';
-import { SpotifyForm, SpotifyHandleSubmit } from './Spotify'
+import { LastFmForm } from './LastFM';
+import { SpotifyForm } from './Spotify'
 
 // teste
 // import jsonData from './jucaetanom.json'
@@ -37,19 +38,18 @@ const TitleBar = () => {
 
 const ChooseSource = () => {
   const {
-    setSource
+    setSource,
   } = useAppContext();
 
   const handleSpotifyClick = () => {
-    setSource("spotify");
-
     const baseUrl = process.env.REACT_APP_BACKEND_URL;
-    const url = `${baseUrl}/spotify/auth`
+    const url = `${baseUrl}/spotify/auth`;
 
-    axios.get(url)
-      .catch(error => {
-        console.error("Error during Spotify authentication request:", error);
-      });
+    try {
+      window.location.href = url;
+    } catch (error) {
+      console.log(error);
+    } 
   }
 
   return (
@@ -136,34 +136,25 @@ const App = () => {
     showResults,
     isLoading,
     source,
+    setSource,
   } = useAppContext();
 
-  /*
-  const submitTest = async (event) => {
-    event.preventDefault(); 
-    setIsLoading(true);
-    try {
-      const data = jsonData
-      setCharts(data)
-      setShowResults(true);
-    } catch (error) {
-      console.error('Erro ao carregar o arquivo JSON:', error);
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const spotifyAuth = params.get('spotifyAuth');
+
+    if (spotifyAuth === 'success') {
+      setSource("spotify");
+      window.history.replaceState({}, document.title, "/");
     }
-  };
-  */
+  }, [setSource]);
 
   function renderSourceForm(source) {
     switch (source) {
       case "spotify":
-        return <SpotifyForm 
-          onSubmit={SpotifyHandleSubmit}
-        />
+        return <SpotifyForm />
       case "lastfm":
-        return <LastFmForm 
-          onSubmit={LastFmHandleSubmit}
-        />
+        return <LastFmForm />
       default:
         return <p>Source error.</p>
     }
@@ -204,3 +195,19 @@ const App = () => {
 
 
 export default App;
+
+  /*
+  const submitTest = async (event) => {
+    event.preventDefault(); 
+    setIsLoading(true);
+    try {
+      const data = jsonData
+      setCharts(data)
+      setShowResults(true);
+    } catch (error) {
+      console.error('Erro ao carregar o arquivo JSON:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  */

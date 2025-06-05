@@ -4,13 +4,15 @@ import axios from "axios";
 
 export const LastFmForm = () => {
   const {
-    onSubmit,
     username,
     setUsername,
     timespan,
     setTimespan,
     category,
     setCategory,
+    setCharts,
+    setShowResults,
+    setIsLoading
   } = useAppContext();
 
   const changeUsername = (event) => {
@@ -26,8 +28,55 @@ export const LastFmForm = () => {
     setCategory(selectedCategory);
   }
 
+  const LastFmHandleSubmit = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    try {
+      let url = '';
+
+      const baseUrl = 'http://localhost:4000/lastfm';
+
+      switch (category) {
+        case 'artists':
+          url = `${baseUrl}/top-artists/${username}`;
+          break;
+        case 'albums':
+          url = `${baseUrl}/top-albums/${username}`;
+          break;
+        case 'tracks':
+          url = `${baseUrl}/top-tracks/${username}`;
+          break;
+        default:
+          throw new Error('Categoria inválida');
+      }
+
+      const res = await axios.get(url, {
+        params: {
+          period: timespan,
+          limit: 10
+        }
+      });
+
+      setCharts(res.data)
+      setShowResults(true);
+
+    } catch (error) {
+      if (error.response) {
+        console.error('Resposta do servidor com erro:', error.response.data);
+        console.error('Código do erro:', error.response.status);
+      } else if (error.request) {
+        console.error('A requisição foi feita, mas não houve resposta', error.request);
+      } else {
+        console.error('Erro ao configurar a requisição', error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={LastFmHandleSubmit}>
 
       <div style={{ paddingBottom: '8px' }} className="field-row">
         <label htmlFor="lastfm_username">LastFM User</label>
@@ -82,63 +131,4 @@ export const LastFmForm = () => {
   )
 };
 
-export const LastFmHandleSubmit = async (event) => {
-  const {
-  category,
-  username,
-  timespan,
-  setCharts,
-  setShowResults,
-  setIsLoading
-} = useAppContext();
 
-  event.preventDefault();
-  setIsLoading(true);
-  try {
-    let url = '';
-
-    const baseUrl = 'http://localhost:4000';
-
-    switch (category) {
-      case 'artists':
-        url = `${baseUrl}/top-artists/${username}`;
-        break;
-      case 'albums':
-        url = `${baseUrl}/top-albums/${username}`;
-        break;
-      case 'tracks':
-        url = `${baseUrl}/top-tracks/${username}`;
-        break;
-      default:
-
-    }
-
-    axios.get(url, {
-      params: {
-        period: timespan,
-        limit: 10
-      }
-    })
-    .then(res => {
-      console.log(res.data);
-      setCharts(res.data);
-    })
-    .catch(err => {
-      console.error(err)
-    })
-
-    setShowResults(true);
-
-  } catch (error) {
-    if (error.response) {
-      console.error('Resposta do servidor com erro:', error.response.data);
-      console.error('Código do erro:', error.response.status);
-    } else if (error.request) {
-      console.error('A requisição foi feita, mas não houve resposta', error.request);
-    } else {
-      console.error('Erro ao configurar a requisição', error.message);
-    }
-  } finally {
-    setIsLoading(false);
-  }
-};

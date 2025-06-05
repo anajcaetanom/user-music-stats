@@ -4,11 +4,13 @@ import axios from "axios";
 
 export const SpotifyForm = () => {
   const {
-  onSubmit,
   timespan,
   setTimespan,
   category,
   setCategory,
+  setCharts,
+  setShowResults,
+  setIsLoading
 } = useAppContext();
 
   const changeTimespan = (event) => {
@@ -20,8 +22,42 @@ export const SpotifyForm = () => {
     setCategory(selectedCategory);
   }
 
+  const SpotifyHandleSubmit = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      const baseUrl = process.env.REACT_APP_BACKEND_URL;
+
+      let url = `${baseUrl}/spotify/top/${category}`;
+
+      const res = await axios.get(url, {
+        params: {
+          time_range: timespan,
+          limit: 10
+        },
+        withCredentials: true
+      });
+
+      setCharts(res.data);
+      setShowResults(true);
+
+    } catch (error) {
+      if (error.response) {
+        console.error('Resposta do servidor com erro:', error.response.data);
+        console.error('Código do erro:', error.response.status);
+      } else if (error.request) {
+        console.error('A requisição foi feita, mas não houve resposta', error.request);
+      } else {
+        console.error('Erro ao configurar a requisição', error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={SpotifyHandleSubmit}>
       
       <fieldset>
         <legend>Timespan</legend>
@@ -63,49 +99,3 @@ export const SpotifyForm = () => {
   )
 };
 
-export const SpotifyHandleSubmit = async (event) => {
-  const {
-  category,
-  timespan,
-  setCharts,
-  setShowResults,
-  setIsLoading
-} = useAppContext();
-
-    event.preventDefault();
-    setIsLoading(true);
-    
-    try {
-      const baseUrl = process.env.REACT_APP_BACKEND_URL;
-
-      let url = `${baseUrl}/top/${category}`;
-
-      axios.get(url, {
-        params: {
-          time_range: timespan,
-          limit: 10
-        }
-      })
-      .then(res => {
-        console.log(res.data);
-        setCharts(res.data);
-      })
-      .catch(err => {
-        console.error(err)
-      })
-
-      setShowResults(true);
-
-    } catch (error) {
-      if (error.response) {
-        console.error('Resposta do servidor com erro:', error.response.data);
-        console.error('Código do erro:', error.response.status);
-      } else if (error.request) {
-        console.error('A requisição foi feita, mas não houve resposta', error.request);
-      } else {
-        console.error('Erro ao configurar a requisição', error.message);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-};
