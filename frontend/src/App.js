@@ -42,8 +42,7 @@ const ChooseSource = () => {
   } = useAppContext();
 
   const handleSpotifyClick = () => {
-    const baseUrl = process.env.REACT_APP_BACKEND_URL;
-    const url = `${baseUrl}/spotify/auth`;
+    const url = `/spotify/auth`;
 
     try {
       window.location.href = url;
@@ -126,8 +125,7 @@ const HomeButton = () => {
 };
 
 const Logout = () => {
-  const baseUrl = process.env.REACT_APP_BACKEND_URL;
-  const url = `${baseUrl}/spotify/logout`
+  const url = `/spotify/logout`
   axios.get(url)
 }
 
@@ -191,7 +189,8 @@ const App = () => {
         </div>
       </div>
     </div>
-  )};
+  );
+};
 
 
 export default App;

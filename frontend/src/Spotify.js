@@ -27,9 +27,7 @@ export const SpotifyForm = () => {
     setIsLoading(true);
     
     try {
-      const baseUrl = process.env.REACT_APP_BACKEND_URL;
-
-      let url = `${baseUrl}/spotify/top/${category}`;
+      let url = `/spotify/top/${category}`;
 
       const res = await axios.get(url, {
         params: {

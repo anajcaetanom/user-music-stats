@@ -52,13 +52,16 @@ router.get('/callback', async (req, res) => {
         req.session.refreshToken = refresh_token;
         req.session.expiresIn = expires_in;
 
-        // res.json({
-        //     access_token,
-        //     refresh_token,
-        //     expires_in
-        // });
+        console.log('ID da Sessão:', req.sessionID);
 
-        res.redirect(`${process.env.FRONTEND_URI}?spotifyAuth=success`)
+        req.session.save((err) => {
+            if (err) {
+                console.error('Erro ao salvar sessão:', err);
+                return res.status(500).send('Error saving session.');
+            }
+            console.log('Sessão salva com sucesso. Redirecionando...');
+            res.redirect(`${process.env.FRONTEND_URI}?spotifyAuth=success`);
+        });
 
     } catch (error) {
         console.error("Erro ao trocar o code por token do Spotify:");
@@ -101,10 +104,11 @@ async function getUserTopData(accessToken, type, time_range, limit = 10) {
 }
 
 router.get('/top/:type', async (req, res) => {
+    console.log('ID da Sessão:', req.sessionID);
     const accessToken = req.session.accessToken;
     console.log('Sessão:', req.session);
     if (!accessToken) {
-        return res.status(401).send('Acesss token is missing.');
+        return res.status(401).send('Access token is missing.');
     }
 
     const { type } = req.params;

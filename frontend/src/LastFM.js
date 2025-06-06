@@ -35,17 +35,15 @@ export const LastFmForm = () => {
     try {
       let url = '';
 
-      const baseUrl = 'http://localhost:4000/lastfm';
-
       switch (category) {
         case 'artists':
-          url = `${baseUrl}/top-artists/${username}`;
+          url = `/lastfm/top-artists/${username}`;
           break;
         case 'albums':
-          url = `${baseUrl}/top-albums/${username}`;
+          url = `/lastfm/top-albums/${username}`;
           break;
         case 'tracks':
-          url = `${baseUrl}/top-tracks/${username}`;
+          url = `/lastfm/top-tracks/${username}`;
           break;
         default:
           throw new Error('Categoria inválida');
