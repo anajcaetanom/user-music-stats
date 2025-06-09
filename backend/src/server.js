@@ -13,6 +13,8 @@ const app = express();
 const spotifyRoutes = require('./spotify_server');
 const lastfmRoutes = require('./lastfm_server');
 
+app.set('trust proxy', 1)
+
 app.use(cors({
     origin: process.env.FRONTEND_URI,
     credentials: true,
@@ -40,13 +42,13 @@ app.use(session({
 app.use(express.json());
 
 // Rotas Spotify
-app.use('/spotify', spotifyRoutes);
+app.use('/api/spotify', spotifyRoutes);
 
 // Rotas LastFM
-app.use('/lastfm', lastfmRoutes);
+app.use('/api/lastfm', lastfmRoutes);
 
 // Rota raiz
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     res.send('API funcionando: Spotify + LastFM');
 });
 

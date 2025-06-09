@@ -33,17 +33,18 @@ export const LastFmForm = () => {
     setIsLoading(true);
 
     try {
+      const baseURL = process.env.REACT_APP_PROXY_LASTFM_URL;
       let url = '';
 
       switch (category) {
         case 'artists':
-          url = `/lastfm/top-artists/${username}`;
+          url = `${baseURL}/top-artists/${username}`;
           break;
         case 'albums':
-          url = `/lastfm/top-albums/${username}`;
+          url = `${baseURL}/top-albums/${username}`;
           break;
         case 'tracks':
-          url = `/lastfm/top-tracks/${username}`;
+          url = `${baseURL}/top-tracks/${username}`;
           break;
         default:
           throw new Error('Categoria inválida');
