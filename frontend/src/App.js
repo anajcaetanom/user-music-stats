@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import './App.css';
 import "98.css";
-import axios from "axios";
 
 import { useAppContext } from "./context/AppContext";
 
@@ -106,7 +106,7 @@ const HomeButton = () => {
     setSource,
   } = useAppContext();
 
-  const resetValues = () => {
+  async function resetValues () {
     setShowResults(false);
     setIsLoading(false);
     setUsername('');
@@ -114,6 +114,14 @@ const HomeButton = () => {
     setCategory('');
     setCharts([]);
     setSource('');
+
+    const baseURL = process.env.REACT_APP_PROXY_SPOTIFY_URL;
+    try {
+      const res = await axios.get(`${baseURL}/cleanRedis`);
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -125,12 +133,6 @@ const HomeButton = () => {
   );
 };
 
-const Logout = () => {
-  const baseURL = process.env.REACT_APP_PROXY_SPOTIFY_URL;
-  const url = `${baseURL}/logout`
-  axios.get(url)
-}
-
 const App = () => {
   const {
     showResults,
@@ -139,20 +141,28 @@ const App = () => {
     setSource,
   } = useAppContext();
 
+  const [requestId, setRequestId] = useState("");
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const spotifyAuth = params.get('spotifyAuth');
 
     if (spotifyAuth === 'success') {
-      setSource("spotify");
-      window.history.replaceState({}, document.title, "/");
-    }
+      const requestId = params.get('id');
+      if (!requestId) {
+        throw new Error("Id is missing.");
+      } else {
+        setSource("spotify");
+        setRequestId(requestId);
+        window.history.replaceState({}, document.title, "/");
+      }
+    } 
   }, [setSource]);
 
   function renderSourceForm(source) {
     switch (source) {
       case "spotify":
-        return <SpotifyForm />
+        return <SpotifyForm requestId={requestId} />
       case "lastfm":
         return <LastFmForm />
       default:
@@ -187,7 +197,6 @@ const App = () => {
                 <Charts />
                 <div style={{ height: '8px'}} className="spacer"></div>
                 <HomeButton />
-                <Logout />
               </div>
             ) : (
             <div>

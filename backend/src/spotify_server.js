@@ -1,6 +1,9 @@
 require('dotenv').config();
+
+const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const axios = require('axios');
+const redis = require('./redisClient');
 
 const router = express.Router();
 
@@ -47,21 +50,14 @@ router.get('/callback', async (req, res) => {
         });
 
         const { access_token, refresh_token, expires_in } = tokenResponse.data
+        
+        const requestId = uuidv4();
 
-        req.session.accessToken = access_token;
-        req.session.refreshToken = refresh_token;
-        req.session.expiresIn = expires_in;
-
-        console.log('ID da Sessão:', req.sessionID);
-
-        req.session.save((err) => {
-            if (err) {
-                console.error('Erro ao salvar sessão:', err);
-                return res.status(500).send('Error saving session.');
-            }
-            console.log('Sessão salva com sucesso. Redirecionando...');
-            res.redirect(`${process.env.FRONTEND_URI}?spotifyAuth=success`);
+        await redis.set(requestId, JSON.stringify({ access_token }), {
+            EX: 300
         });
+
+        res.redirect(`${process.env.FRONTEND_URI}/?spotifyAuth=success&id=${requestId}`);
 
     } catch (error) {
         console.error("Erro ao trocar o code por token do Spotify:");
@@ -79,16 +75,6 @@ router.get('/callback', async (req, res) => {
     }
 });
 
-router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).send('Couldnt logout.')
-        }
-        res.clearCookie('connect.sid');
-        res.sendStatus(200);
-    });
-});
-
 async function getUserTopData(accessToken, type, time_range, limit = 10) {
     const response = await axios.get(`https://api.spotify.com/v1/me/top/${type}`, {
         headers: {
@@ -104,27 +90,36 @@ async function getUserTopData(accessToken, type, time_range, limit = 10) {
 }
 
 router.get('/top/:type', async (req, res) => {
-    console.log('ID da Sessão:', req.sessionID);
-    const accessToken = req.session.accessToken;
-    console.log('Sessão:', req.session);
-    if (!accessToken) {
-        return res.status(401).send('Access token is missing.');
-    }
-
     const { type } = req.params;
-    const { time_range, limit = 10 } = req.query;
+    const { time_range, limit = 10, id } = req.query;
+
+    if (!id) return res.status(400).send('Missing request ID.');
 
     if (!['artists', 'tracks'].includes(type)) {
         return res.status(400).send('Invalid type.');
     }
 
     try {
-        const data = await getUserTopData(accessToken, type, time_range, limit);
+        const raw = await redis.get(id);
+        if (!raw) {
+            return res.status(401).send('Expired or invalid token.');
+        }
+        const { access_token  } = JSON.parse(raw);
+        const data = await getUserTopData(access_token , type, time_range, limit);
         res.json(data);
     } catch (error) {
         console.error(error.response?.data || error.message);
         res.status(500).send(`Error fetching top ${type}`);
     }
+});
+
+router.get('/cleanRedis', async (req, res) => {
+  try {
+    await redis.flushAll();
+    console.log('Redis limpo com sucesso!');
+  } catch (err) {
+    console.error('Erro ao limpar o Redis:', err);
+  }
 });
 
 module.exports = router;

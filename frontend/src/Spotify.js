@@ -2,7 +2,9 @@
 import { useAppContext } from "./context/AppContext";
 import axios from "axios";
 
-export const SpotifyForm = () => {
+export const SpotifyForm = (
+  { requestId }
+) => {
   const {
   timespan,
   setTimespan,
@@ -33,7 +35,8 @@ export const SpotifyForm = () => {
       const res = await axios.get(url, {
         params: {
           time_range: timespan,
-          limit: 10
+          limit: 10,
+          id: requestId
         },
         withCredentials: true
       });
