@@ -113,6 +113,34 @@ router.get('/top/:type', async (req, res) => {
     }
 });
 
+async function getUserName(accessToken) {
+    const response = await axios.get(`https://api.spotify.com/v1/me`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`, 
+        }
+    });
+
+    return response.data.display_name;
+}
+
+router.get('/userName', async (req, res) => {
+    const {id} = req.query;
+    if (!id) return res.status(400).send('Missing request ID.');
+
+    try {
+        const raw = await redis.get(id);
+        if (!raw) {
+            return res.status(401).send('Expired or invalid token.');
+        }
+        const { access_token  } = JSON.parse(raw);
+        const data = await getUserName(access_token);
+        res.json(data);
+    } catch (error) {
+        console.error(error.response?.data || error.message);
+        res.status(500).send(`Error fetching top ${type}`);
+    }
+})
+
 router.get('/cleanRedis', async (req, res) => {
   try {
     await redis.flushAll();

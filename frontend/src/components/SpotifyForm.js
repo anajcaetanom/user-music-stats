@@ -1,19 +1,12 @@
 /////////// Spotify stuff ///////////
-import { useAppContext } from "./context/AppContext";
+import { useData } from "../context/DataContext";
+import { useUi } from "../context/UiContext";
 import axios from "axios";
 
-export const SpotifyForm = (
-  { requestId }
-) => {
-  const {
-  timespan,
-  setTimespan,
-  category,
-  setCategory,
-  setCharts,
-  setShowResults,
-  setIsLoading
-} = useAppContext();
+export const SpotifyForm = ({ requestId, setCharts }) => {
+  const { timespan, setTimespan,
+          category, setCategory, } = useData();
+  const { setShowResults, setIsLoading} = useUi();
 
   const changeTimespan = (event) => {
     const selectedTimespan = event.target.id;
@@ -37,8 +30,7 @@ export const SpotifyForm = (
           time_range: timespan,
           limit: 10,
           id: requestId
-        },
-        withCredentials: true
+        }
       });
 
       setCharts(res.data);

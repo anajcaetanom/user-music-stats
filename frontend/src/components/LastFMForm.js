@@ -1,8 +1,9 @@
 /////////// LastFm stuff ///////////
-import { useAppContext } from "./context/AppContext";
+import { useData } from "../context/DataContext";
+import { useUi } from "../context/UiContext";
 import axios from "axios";
 
-export const LastFmForm = () => {
+export const LastFmForm = ({setCharts}) => {
   const {
     username,
     setUsername,
@@ -10,10 +11,8 @@ export const LastFmForm = () => {
     setTimespan,
     category,
     setCategory,
-    setCharts,
-    setShowResults,
-    setIsLoading
-  } = useAppContext();
+  } = useData();
+  const { setShowResults, setIsLoading} = useUi();
 
   const changeUsername = (event) => {
     const writtenUsername = event.target.value;

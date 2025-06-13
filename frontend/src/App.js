@@ -1,147 +1,110 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import './App.css';
 import "98.css";
 
-import { useAppContext } from "./context/AppContext";
+import { HomeButton } from './components/HomeButton';
+import { ChooseSource } from './components/ChooseSource';
+import { Charts, LastFmCharts } from './components/LastFmCharts';
+import { TitleBar } from './components/TitleBar';
+import { LastFmForm } from './components/LastFMForm';
+import { SpotifyForm } from './components/SpotifyForm'
 
-import { LastFmForm } from './LastFM';
-import { SpotifyForm } from './Spotify'
+import { useUi } from './context/UiContext';
+import { BackToCategoriesButton } from './components/BackToCategoriesButton';
+import { SpotifyCharts } from './components/SpotifyCharts';
+
 
 // teste
 // import jsonData from './jucaetanom.json'
 //
 
-const TitleBar = () => {
-  const {
-    showResults, 
-    setShowResults
-  } = useAppContext();
-
-  const backButton = () => {
-    setShowResults(false)
-  }
-
-  return (
-    <div className="title-bar">
-      <div className="title-bar-text">LastFM Stats</div>
-      <div className="title-bar-controls">
-        <button 
-          aria-label="Close" 
-          disabled={!showResults} 
-          onClick={backButton}
-        />
-      </div>
-    </div>
-  )
-}
-
-const ChooseSource = () => {
-  const {
-    setSource,
-  } = useAppContext();
-
-  const handleSpotifyClick = () => {
-    const baseURL = process.env.REACT_APP_PROXY_SPOTIFY_URL;
-    const url = `${baseURL}/auth`;
-
-    try {
-      window.location.href = url;
-    } catch (error) {
-      console.log(error);
-    } 
-  }
-
-  return (
-    <div className="center">
-      <button onClick={handleSpotifyClick}>
-        Spotify
-      </button>
-      <button onClick={() => setSource("lastfm")}>
-        LastFM
-      </button>
-    </div>
-  ) 
-}
-
-const Charts = () => {
-  const {
-    charts, 
-    source
-  } = useAppContext();
-
-  const data = source === "spotify" ? charts.items : charts;
-
-  return (
-    <div> 
-      {data && data.length > 0 ? (
-        <div> 
-          {data.map((chart, index) => (
-
-            <ul key={chart.id || chart.mbid} className="tree-view">
-              <li><strong>{index + 1}{chart.name}</strong></li>
-              {source === "lastfm" && (
-                <li>Playcount: {chart.playcount}</li> 
-              )} 
-            </ul>
-          ))}
-        </div>
-      ) : (
-        <div>
-          <p>No charts available</p>
-        </div>
-      )}
-      </div>
-  );
-};
-
-const HomeButton = () => {
+const AppBody = ({source, setSource, requestId}) => {
   const {
     setShowResults,
-    setIsLoading,
-    setUsername,
-    setTimespan,
-    setCategory,
-    setCharts,
-    setSource,
-  } = useAppContext();
+    showResults,
+    isLoading,
+  } = useUi();
 
-  async function resetValues () {
-    setShowResults(false);
-    setIsLoading(false);
-    setUsername('');
-    setTimespan('');
-    setCategory('');
-    setCharts([]);
-    setSource('');
+  const [charts, setCharts] = useState([]);
 
-    const baseURL = process.env.REACT_APP_PROXY_SPOTIFY_URL;
-    try {
-      const res = await axios.get(`${baseURL}/cleanRedis`);
-      console.log(res.data);
-    } catch (error) {
-      console.error(error);
+  function renderSourceChart(source) {
+    switch (source) {
+      case "spotify":
+        return <SpotifyCharts
+          charts={charts}
+          requestId={requestId}
+        />
+      case "lastfm":
+        return <LastFmCharts 
+          charts={charts}
+        />
+      default:
+        return <p>Source error.</p>
+    }
+  }
+
+  function renderSourceForm(source) {
+    switch (source) {
+      case "spotify":
+        return (
+          <SpotifyForm 
+            requestId={requestId} 
+            setCharts={setCharts} 
+          />
+        )
+      case "lastfm":
+        return <LastFmForm setCharts={setCharts} />
+      default:
+        return <p>Source error.</p>
     }
   };
 
-  return (
-    <div className='center'>
-      <button onClick={resetValues}>
-        Return to Home
-      </button>
-    </div>
+  const BaseLayout = ({ children }) => (
+    <>
+      {children}
+      <div className="spacer" style={{ height: '8px' }} />
+      <HomeButton 
+        setCharts={setCharts}
+        setSource={setSource}
+      />
+    </>
   );
+
+  if (isLoading) {
+    return (
+      <BaseLayout>
+        <p>Loading...</p>
+      </BaseLayout>
+    )
+  };
+
+  if (!showResults) {
+    return (
+      !source ? (
+        <ChooseSource
+          setSource={setSource}
+        />
+      ) : (
+        renderSourceForm(source)
+      )
+    )
+  };
+
+  return (
+    <BaseLayout>
+        {renderSourceChart(source)}
+      <div className="spacer" style={{ height: '8px' }} />
+      <BackToCategoriesButton
+        setShowResults={setShowResults}
+        setCharts={setCharts}
+      />
+    </BaseLayout>
+  )
 };
 
 const App = () => {
-  const {
-    showResults,
-    isLoading,
-    source,
-    setSource,
-  } = useAppContext();
-
   const [requestId, setRequestId] = useState("");
+  const [source, setSource] = useState("");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -152,59 +115,23 @@ const App = () => {
       if (!requestId) {
         throw new Error("Id is missing.");
       } else {
-        setSource("spotify");
         setRequestId(requestId);
+        setSource("spotify");
         window.history.replaceState({}, document.title, "/");
       }
     } 
   }, [setSource]);
-
-  function renderSourceForm(source) {
-    switch (source) {
-      case "spotify":
-        return <SpotifyForm requestId={requestId} />
-      case "lastfm":
-        return <LastFmForm />
-      default:
-        return <p>Source error.</p>
-    }
-  }
 
   return (
     <div className="background">
       <div className="window">
         <TitleBar />
         <div className="window-body">
-          {isLoading ? (
-            <div>
-              <p>Loading...</p>
-              <HomeButton />
-            </div>
-          ) : !showResults ? (
-            !source ? (
-              <div>
-                <ChooseSource />
-              </div>
-            ) : (
-              <div>
-                {renderSourceForm(source)}
-                <HomeButton />
-              </div>
-            )
-          ) : (
-            source === "spotify" ? (
-              <div>
-                <Charts />
-                <div style={{ height: '8px'}} className="spacer"></div>
-                <HomeButton />
-              </div>
-            ) : (
-            <div>
-              <Charts />
-              <div style={{ height: '8px'}} className="spacer"></div>
-              <HomeButton />
-            </div>
-          ))}
+          <AppBody 
+            requestId={requestId}
+            setSource={setSource}
+            source={source}
+          />
         </div>
       </div>
     </div>
