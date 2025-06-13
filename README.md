@@ -2,8 +2,6 @@
 
 This project is a React application that lets you view your personal music statistics from Spotify and Last.fm. You can choose the source, select categories and time periods to see your most listened artists, tracks, and albums.
 
----
-
 ## Features
 
 - Integration with Spotify and Last.fm
@@ -17,7 +15,6 @@ This project is a React application that lets you view your personal music stati
 - Data visualization in charts and lists
 - Responsive and simple interface, inspired by Windows 98
 
----
 
 ## Technologies Used
 
@@ -27,7 +24,6 @@ This project is a React application that lets you view your personal music stati
 - Last.fm API
 - Custom CSS + 98.css for a Windows 98-style interface
 
----
 
 ## Project Structure
 
@@ -36,11 +32,7 @@ This project is a React application that lets you view your personal music stati
 - `/src/App.js` — Main component
 - `/src/App.css` — Main styles
 
----
-
 
 ## License
-
 Open-source project for educational and personal purposes.
 
----
