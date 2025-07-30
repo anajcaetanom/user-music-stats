@@ -32,6 +32,42 @@ This project is a React application that lets you view your personal music stati
 - `/src/App.js` — Main component
 - `/src/App.css` — Main styles
 
+## How to run locally
+
+1. Clone the repository:
+
+  ```bash
+  git clone https://github.com/your-user/your-repo.git
+  ```
+
+1. Navigate to the backend folder:
+
+  ```bash
+  cd user-music-stats/backend
+  ```
+
+1. Create the `.env` file and fill in the required fields:
+
+  ```bash
+  cp .env.example .env
+  ```
+
+1. Install backend dependencies:
+
+  ```bash
+  npm install
+  ```
+
+1. Repeat the same steps in the frontend folder:
+
+  ```bash
+  cd ../frontend
+  cp .env.example .env
+  npm install
+  npm run dev
+  ```
+
+
 
 ## License
 Open-source project for educational and personal purposes.
