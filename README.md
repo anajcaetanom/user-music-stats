@@ -56,7 +56,7 @@ This project is a React application that lets you view your personal music stati
 
   ```bash
   npm install
-  npm run
+  npm start
   ```
 
 1. Repeat the same steps in the frontend folder:
@@ -65,7 +65,7 @@ This project is a React application that lets you view your personal music stati
   cd ../frontend
   cp .env.example .env
   npm install
-  npm run 
+  npm start 
   ```
 
 
