@@ -52,10 +52,11 @@ This project is a React application that lets you view your personal music stati
   cp .env.example .env
   ```
 
-1. Install backend dependencies:
+1. Install backend dependencies and run it:
 
   ```bash
   npm install
+  npm run
   ```
 
 1. Repeat the same steps in the frontend folder:
@@ -64,7 +65,7 @@ This project is a React application that lets you view your personal music stati
   cd ../frontend
   cp .env.example .env
   npm install
-  npm run dev
+  npm run 
   ```
 
 
