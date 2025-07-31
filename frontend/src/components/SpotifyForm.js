@@ -1,12 +1,35 @@
 /////////// Spotify stuff ///////////
 import { useData } from "../context/DataContext";
 import { useUi } from "../context/UiContext";
+import { useEffect } from "react";
 import axios from "axios";
 
 export const SpotifyForm = ({ requestId, setCharts }) => {
-  const { timespan, setTimespan,
-          category, setCategory, } = useData();
   const { setShowResults, setIsLoading} = useUi();
+  const { 
+    timespan, setTimespan,
+    category, setCategory, 
+    username, setUsername, 
+  } = useData();
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const baseURL = process.env.REACT_APP_PROXY_SPOTIFY_URL;
+        let url = `${baseURL}/userName`;
+        const res = await axios.get(url, {
+          params: {
+            id: requestId
+          }
+        });
+        setUsername(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserName();
+  }, [requestId]);
 
   const changeTimespan = (event) => {
     const selectedTimespan = event.target.id;
@@ -52,7 +75,9 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
 
   return (
     <form onSubmit={SpotifyHandleSubmit}>
-      
+      <div className="center">
+        <p><strong> user: {username.toUpperCase()}</strong></p>
+      </div>
       <fieldset>
         <legend>Timespan</legend>
         <div className="field-row">

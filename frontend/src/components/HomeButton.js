@@ -25,10 +25,8 @@ export const HomeButton = ({setCharts, setSource}) => {
   };
 
   return (
-    <div className='center'>
-      <button onClick={resetValues}>
-        Return to the Beginning
-      </button>
+    <div className="center">
+      <button onClick={resetValues}>Go Home</button>
     </div>
   );
 };

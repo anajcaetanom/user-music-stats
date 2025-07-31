@@ -4,11 +4,10 @@ import "98.css";
 
 import { HomeButton } from './components/HomeButton';
 import { ChooseSource } from './components/ChooseSource';
-import { Charts, LastFmCharts } from './components/LastFmCharts';
+import { LastFmCharts } from './components/LastFmCharts';
 import { TitleBar } from './components/TitleBar';
 import { LastFmForm } from './components/LastFMForm';
 import { SpotifyForm } from './components/SpotifyForm'
-
 import { useUi } from './context/UiContext';
 import { BackToCategoriesButton } from './components/BackToCategoriesButton';
 import { SpotifyCharts } from './components/SpotifyCharts';
@@ -18,7 +17,7 @@ import { SpotifyCharts } from './components/SpotifyCharts';
 // import jsonData from './jucaetanom.json'
 //
 
-const AppBody = ({source, setSource, requestId}) => {
+const AppBody = ({ source, setSource, requestId }) => {
   const {
     setShowResults,
     showResults,
@@ -85,7 +84,9 @@ const AppBody = ({source, setSource, requestId}) => {
           setSource={setSource}
         />
       ) : (
-        renderSourceForm(source)
+        <BaseLayout>
+          {renderSourceForm(source)}
+        </BaseLayout>
       )
     )
   };
