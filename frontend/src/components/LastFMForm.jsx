@@ -1,6 +1,6 @@
 /////////// LastFm stuff ///////////
-import { useData } from "../context/DataContext";
-import { useUi } from "../context/UiContext";
+import { useData } from "@context/DataContext";
+import { useUi } from "@context/UiContext";
 import axios from "axios";
 
 export const LastFmForm = ({setCharts}) => {

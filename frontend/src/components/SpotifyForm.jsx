@@ -1,6 +1,6 @@
 /////////// Spotify stuff ///////////
-import { useData } from "../context/DataContext";
-import { useUi } from "../context/UiContext";
+import { useData } from "@context/DataContext";
+import { useUi } from "@context/UiContext";
 import { useEffect } from "react";
 import axios from "axios";
 

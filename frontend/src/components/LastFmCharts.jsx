@@ -1,4 +1,4 @@
-import { useData } from "../context/DataContext";
+import { useData } from "@context/DataContext";
 
 export const LastFmCharts = ({charts}) => {
   const { username, timespan, category} = useData();

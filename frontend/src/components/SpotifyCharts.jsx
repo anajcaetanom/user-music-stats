@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useData } from "../context/DataContext";
+import { useData } from "@context/DataContext";
 import { useEffect } from "react";
 
 export const SpotifyCharts = ({charts, requestId}) => {

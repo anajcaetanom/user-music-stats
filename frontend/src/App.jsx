@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import "98.css";
 
-import { HomeButton } from './components/HomeButton';
-import { ChooseSource } from './components/ChooseSource';
-import { LastFmCharts } from './components/LastFmCharts';
-import { TitleBar } from './components/TitleBar';
-import { LastFmForm } from './components/LastFMForm';
-import { SpotifyForm } from './components/SpotifyForm'
-import { useUi } from './context/UiContext';
-import { BackToCategoriesButton } from './components/BackToCategoriesButton';
-import { SpotifyCharts } from './components/SpotifyCharts';
+import { BackToCategoriesButton } from '@components/BackToCategoriesButton';
+import { HomeButton, DesktopButton } from '@components/Buttons';
+import { SpotifyCharts } from '@components/SpotifyCharts';
+import { LastFmCharts } from '@components/LastFmCharts';
+import { SpotifyForm } from '@components/SpotifyForm'
+import { LastFmForm } from '@components/LastFMForm';
+import { ChooseSource } from '@components/ChooseSource';
+import { TitleBar } from '@components/TitleBar';
+
+import { useUi } from '@context/UiContext';
 
 
 // teste
@@ -106,6 +107,7 @@ const AppBody = ({ source, setSource, requestId }) => {
 const App = () => {
   const [requestId, setRequestId] = useState("");
   const [source, setSource] = useState("");
+  const { isAppOpen } = useUi();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -125,7 +127,10 @@ const App = () => {
 
   return (
     <div className="background">
-      <div className="window">
+      {!isAppOpen ? (
+        <DesktopButton />
+      ) : ( 
+        <div className="window">
         <TitleBar />
         <div className="window-body">
           <AppBody 
@@ -135,6 +140,7 @@ const App = () => {
           />
         </div>
       </div>
+      )}
     </div>
   );
 };
