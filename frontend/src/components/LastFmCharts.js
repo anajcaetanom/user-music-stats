@@ -18,28 +18,35 @@ export const LastFmCharts = ({charts}) => {
   };
 
   return (
-    <div> 
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      minHeight: 0
+    }}> 
       <div className="center">
         <p><strong> {username.toUpperCase()}'s Top {categoryMap[category]} in the {timespanMap[timespan]}. </strong></p>
       </div>
       <div className="spacer" style={{ height: '8px' }} />
-      {charts && charts.length > 0 ? (
-        <div> 
-          {charts.map((chart, index) => (
-            <ul key={chart.mbid || `${chart.name}-${index}`} className="tree-view">
-              <li><strong>{index + 1}. {chart.name}</strong></li>
-              {category !== "artists" && chart.artist?.name && (
-                <li>{chart.artist.name}</li>
-              )}
-              <li>Playcount: {chart.playcount}</li> 
-            </ul>
-          ))}
-        </div>
-      ) : (
-        <div>
-          <p>No charts available</p>
-        </div>
-      )}
+      <div className="charts">
+        {charts && charts.length > 0 ? (
+          <div>
+            {charts.map((chart, index) => (
+              <ul key={chart.mbid || `${chart.name}-${index}`} className="tree-view">
+                <li><strong>{index + 1}. {chart.name}</strong></li>
+                {category !== "artists" && chart.artist?.name && (
+                  <li>{chart.artist.name}</li>
+                )}
+                <li>Playcount: {chart.playcount}</li>
+              </ul>
+            ))}
+          </div>
+        ) : (
+          <div>
+            <p>No charts available</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

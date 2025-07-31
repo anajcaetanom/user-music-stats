@@ -13,34 +13,51 @@
   align-items: center;     
   height: 100vh;           
   margin: 0;               
-
-  /* url('https://wallpapercave.com/wp/wp12776613.jpg'), */
-  background: linear-gradient(-45deg, #ff7bb8, #faabcaf6, #23a6d5, #ffffff); 
-  background-size: cover, 400% 400%; 
-  background-position: 0% 50%, center;
-  background-repeat: no-repeat;
-
-  animation: gradient 15s ease infinite;  
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%, center;
-  }
-  50% {
-    background-position: 100% 50%, center;
-  }
-  100% {
-    background-position: 0% 50%, center;
-  }
 }
 
 .window {
   width: 300px;
   z-index: 2;
   max-height: 90vh;
-  overflow-y: auto;
   font-size: 2em; 
+  display: flex;
+  flex-direction: column;
+}
+
+.window-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; 
+}
+
+.charts {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+/* sombra no topo */
+.charts::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  height: 20px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* sombra no fundo */
+.charts::after {
+  content: '';
+  position: sticky;
+  bottom: 0;
+  height: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.459), transparent);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .center {
@@ -51,4 +68,28 @@
 
 .title-bar-text {
   font-size: 20px;
+}
+
+@media (max-width: 599px) and (orientation: portrait) {
+  /* Estilos para celulares em pé */
+  .background {
+    background: url(https://i.pinimg.com/1200x/e1/42/df/e142df7c945a5e8df488b2a700916fd0.jpg);
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: #008081;
+  }
+}
+
+@media (max-width: 899px) and (orientation: landscape) {
+  /* Estilos para celulares deitados */
+}
+
+/* Tablet (600px até 1023px) */
+@media (min-width: 600px) and (max-width: 1023px) { }
+
+/* Desktop (a partir de 1024px) */
+@media (min-width: 1024px) {
+
 }

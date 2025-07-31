@@ -29,6 +29,7 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
     };
 
     fetchUserName();
+    // eslint-disable-next-line
   }, [requestId]);
 
   const changeTimespan = (event) => {

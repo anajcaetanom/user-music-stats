@@ -39,27 +39,34 @@ export const SpotifyCharts = ({charts, requestId}) => {
   };
 
   return (
-    <div>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      minHeight: 0
+    }}>
       <div className="center">
         <p><strong> {username.toUpperCase()}'s Top {categoryMap[category]} in the {timespanMap[timespan]}. </strong></p>
       </div>
       <div className="spacer" style={{ height: '8px' }} />
-      {data && data.length > 0 ? (
-        <div> 
-          {data.map((chart, index) => (
-            <ul key={chart.id || `${chart.name}-${index}`} className="tree-view">
-              <li><strong>{index + 1}. {chart.name}</strong></li>
-              {category === "tracks" && (
-                <li>{chart.artists[0].name}</li>
-              )}
-            </ul>
-          ))}
-        </div>
-      ) : (
-        <div>
-          <p>No charts available</p>
-        </div>
-      )}
+      <div className="charts">
+        {data && data.length > 0 ? (
+          <div>
+            {data.map((chart, index) => (
+              <ul key={chart.id || `${chart.name}-${index}`} className="tree-view">
+                <li><strong>{index + 1}. {chart.name}</strong></li>
+                {category === "tracks" && (
+                  <li>{chart.artists[0].name}</li>
+                )}
+              </ul>
+            ))}
+          </div>
+        ) : (
+          <div>
+            <p>No charts available</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 
