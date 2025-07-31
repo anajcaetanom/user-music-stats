@@ -5,6 +5,7 @@ const UiContext = createContext();
 export const UiProvider = ({ children }) => {
     const [showResults, setShowResults] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isAppOpen, setIsAppOpen] = useState(false);
   
     return (
         <UiContext.Provider value={{
@@ -12,6 +13,8 @@ export const UiProvider = ({ children }) => {
             setShowResults,
             isLoading,
             setIsLoading,
+            isAppOpen,
+            setIsAppOpen
         }}>
             {children}
         </UiContext.Provider>

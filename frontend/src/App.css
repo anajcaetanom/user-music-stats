@@ -19,7 +19,6 @@
   width: 300px;
   z-index: 2;
   max-height: 90vh;
-  font-size: 2em; 
   display: flex;
   flex-direction: column;
 }
@@ -66,16 +65,12 @@
   align-items: center;
 }
 
-.title-bar-text {
-  font-size: 20px;
-}
-
 @media (max-width: 599px) and (orientation: portrait) {
   /* Estilos para celulares em pé */
   .background {
-    background: url(https://i.pinimg.com/1200x/e1/42/df/e142df7c945a5e8df488b2a700916fd0.jpg);
+    background: url(https://i.pinimg.com/1200x/c0/3f/69/c03f6925e6f3d6935c13ce430e76e5b3.jpg);
     background-repeat: no-repeat;
-    background-position: top left;
+    background-position: bottom left;
     background-size: cover;
     background-attachment: fixed;
     background-color: #008081;
