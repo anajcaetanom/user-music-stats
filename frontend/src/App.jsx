@@ -62,7 +62,7 @@ const AppBody = ({ source, setSource, requestId }) => {
   const BaseLayout = ({ children }) => (
     <>
       {children}
-      <div className="spacer" style={{ height: '8px' }} />
+      <div className="spacer" />
       <HomeButton 
         setCharts={setCharts}
         setSource={setSource}
@@ -95,7 +95,7 @@ const AppBody = ({ source, setSource, requestId }) => {
   return (
     <BaseLayout>
         {renderSourceChart(source)}
-      <div className="spacer" style={{ height: '8px' }} />
+      <div className="spacer" />
       <BackToCategoriesButton
         setShowResults={setShowResults}
         setCharts={setCharts}

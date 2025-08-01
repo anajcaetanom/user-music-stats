@@ -17,16 +17,11 @@ export const LastFmCharts = ({charts}) => {
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      flex: 1,
-      minHeight: 0
-    }}> 
+    <div> 
       <div className="center">
         <p><strong> {username.toUpperCase()}'s Top {categoryMap[category]} in the {timespanMap[timespan]}. </strong></p>
       </div>
-      <div className="spacer" style={{ height: '8px' }} />
+      <div className="spacer" />
       <div className="charts">
         {charts && charts.length > 0 ? (
           <div>

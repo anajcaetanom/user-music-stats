@@ -76,9 +76,7 @@ export const LastFmForm = ({setCharts}) => {
   return (
     <form onSubmit={LastFmHandleSubmit}>
 
-      <div style={{
-        padding: '1px 7vh'
-      }}>
+      <div>
         <div className="center">
           <img 
             src="user-icon.jpg" 
@@ -86,7 +84,7 @@ export const LastFmForm = ({setCharts}) => {
             style={{ width: '11vh', borderRadius: '8px', border: '1px solid gray', margin: '2vh'}}
           />
         </div>
-        <div style={{ paddingBottom: '8px' }} className="field-row-stacked">
+        <div className="field-row-stacked">
           <label htmlFor="lastfm_username">LastFM User:</label>
           <input id="lastfm_username" type="text" value={username} onChange={changeUsername} required />
         </div>
@@ -110,7 +108,7 @@ export const LastFmForm = ({setCharts}) => {
           </div>
         </fieldset>
         
-        <div style={{ height: '8px'}} className="spacer"></div>
+        <div className="spacer"></div>
         <fieldset>
           <legend>Category</legend>
           <div className="field-row">

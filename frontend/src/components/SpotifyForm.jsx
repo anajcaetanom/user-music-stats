@@ -95,7 +95,7 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
         </div>
       </fieldset>
 
-      <div style={{ height: '8px'}} className="spacer"></div>
+      <div className="spacer"></div>
 
       <fieldset>
         <legend>Category</legend>
