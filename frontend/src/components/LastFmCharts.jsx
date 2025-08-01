@@ -2,7 +2,6 @@ import { useData } from "@context/DataContext";
 
 export const LastFmCharts = ({charts}) => {
   const { username, timespan, category} = useData();
-  // console.log(charts);
 
   const categoryMap = {
     tracks: "Tracks",

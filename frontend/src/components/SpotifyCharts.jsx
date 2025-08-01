@@ -9,7 +9,7 @@ export const SpotifyCharts = ({charts, requestId}) => {
   useEffect(() => {
     const fetchUserName = async () => {
       try {
-        const baseURL = process.env.REACT_APP_PROXY_SPOTIFY_URL;
+        const baseURL = import.meta.env.VITE_PROXY_SPOTIFY_URL;
         let url = `${baseURL}/userName`;
         const res = await axios.get(url, {
           params: {

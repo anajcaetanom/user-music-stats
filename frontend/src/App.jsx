@@ -107,7 +107,7 @@ const AppBody = ({ source, setSource, requestId }) => {
 const App = () => {
   const [requestId, setRequestId] = useState("");
   const [source, setSource] = useState("");
-  const { isAppOpen } = useUi();
+  const { isAppOpen, isClosing } = useUi();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -130,7 +130,7 @@ const App = () => {
       {!isAppOpen ? (
         <DesktopButton />
       ) : ( 
-        <div className="window">
+        <div className={`window ${isClosing ? 'closing' : ''}`}>
         <TitleBar />
         <div className="window-body">
           <AppBody 

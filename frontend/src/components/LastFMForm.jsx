@@ -32,7 +32,7 @@ export const LastFmForm = ({setCharts}) => {
     setIsLoading(true);
 
     try {
-      const baseURL = process.env.REACT_APP_PROXY_LASTFM_URL;
+      const baseURL = import.meta.env.VITE_PROXY_LASTFM_URL;
       let url = '';
 
       switch (category) {
@@ -56,7 +56,7 @@ export const LastFmForm = ({setCharts}) => {
         }
       });
 
-      setCharts(res.data)
+      setCharts(res.data);
       setShowResults(true);
 
     } catch (error) {
@@ -76,48 +76,57 @@ export const LastFmForm = ({setCharts}) => {
   return (
     <form onSubmit={LastFmHandleSubmit}>
 
-      <div style={{ paddingBottom: '8px' }} className="field-row">
-        <label htmlFor="lastfm_username">LastFM User</label>
-        <input id="lastfm_username" type="text" value={username} onChange={changeUsername} required />
+      <div style={{
+        padding: '1px 7vh'
+      }}>
+        <div className="center">
+          <img 
+            src="user-icon.jpg" 
+            alt="user icon" 
+            style={{ width: '11vh', borderRadius: '8px', border: '1px solid gray', margin: '2vh'}}
+          />
+        </div>
+        <div style={{ paddingBottom: '8px' }} className="field-row-stacked">
+          <label htmlFor="lastfm_username">LastFM User:</label>
+          <input id="lastfm_username" type="text" value={username} onChange={changeUsername} required />
+        </div>
+        <fieldset>
+          <legend>Timespan</legend>
+          <div className="field-row">
+            <input id="7day" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "7day"} required />
+            <label htmlFor="7day">Last week</label>
+          </div>
+          <div className="field-row">
+            <input id="1month" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "1month"} />
+            <label htmlFor="1month">Last month</label>
+          </div>
+          <div className="field-row">
+            <input id="6month" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "6month"} />
+            <label htmlFor="6month">6 months</label>
+          </div>
+          <div className="field-row">
+            <input id="12month" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "12month"} />
+            <label htmlFor="12month">Last year</label>
+          </div>
+        </fieldset>
+        
+        <div style={{ height: '8px'}} className="spacer"></div>
+        <fieldset>
+          <legend>Category</legend>
+          <div className="field-row">
+            <input id="tracks" type="radio" name="category" onChange={changeCategory} checked={category === "tracks"} />
+            <label htmlFor="tracks">Top Tracks</label>
+          </div>
+          <div className="field-row">
+            <input id="artists" type="radio" name="category" onChange={changeCategory} checked={category === "artists"} required />
+            <label htmlFor="artists">Top Artists</label>
+          </div>
+          <div className="field-row">
+            <input id="albums" type="radio" name="category" onChange={changeCategory} checked={category === "albums"} />
+            <label htmlFor="albums">Top Albums</label>
+          </div>
+        </fieldset>
       </div>
-
-      <fieldset>
-        <legend>Timespan</legend>
-        <div className="field-row">
-          <input id="7day" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "7day"} required />
-          <label htmlFor="7day">Last week</label>
-        </div>
-        <div className="field-row">
-          <input id="1month" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "1month"} />
-          <label htmlFor="1month">Last month</label>
-        </div>
-        <div className="field-row">
-          <input id="6month" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "6month"} />
-          <label htmlFor="6month">6 months</label>
-        </div>
-        <div className="field-row">
-          <input id="12month" type="radio" name="timespan" onChange={changeTimespan} checked={timespan === "12month"} />
-          <label htmlFor="12month">Last year</label>
-        </div>
-      </fieldset>
-      
-      <div style={{ height: '8px'}} className="spacer"></div>
-
-      <fieldset>
-        <legend>Category</legend>
-        <div className="field-row">
-          <input id="tracks" type="radio" name="category" onChange={changeCategory} checked={category === "tracks"} />
-          <label htmlFor="tracks">Top Tracks</label>
-        </div>
-        <div className="field-row">
-          <input id="artists" type="radio" name="category" onChange={changeCategory} checked={category === "artists"} required />
-          <label htmlFor="artists">Top Artists</label>
-        </div>
-        <div className="field-row">
-          <input id="albums" type="radio" name="category" onChange={changeCategory} checked={category === "albums"} />
-          <label htmlFor="albums">Top Albums</label>
-        </div>
-      </fieldset>
 
       <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '8px' }}>
         <button type="submit" aria-label="submit" disabled={ !username || !timespan || !category }>

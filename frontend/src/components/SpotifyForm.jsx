@@ -15,7 +15,7 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
   useEffect(() => {
     const fetchUserName = async () => {
       try {
-        const baseURL = process.env.REACT_APP_PROXY_SPOTIFY_URL;
+        const baseURL = import.meta.env.VITE_PROXY_SPOTIFY_URL;
         let url = `${baseURL}/userName`;
         const res = await axios.get(url, {
           params: {
@@ -46,7 +46,7 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
     setIsLoading(true);
     
     try {
-      const baseURL = process.env.REACT_APP_PROXY_SPOTIFY_URL;
+      const baseURL = import.meta.env.VITE_PROXY_SPOTIFY_URL;
       let url = `${baseURL}/top/${category}`;
 
       const res = await axios.get(url, {

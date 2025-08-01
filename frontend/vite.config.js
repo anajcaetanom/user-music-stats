@@ -13,14 +13,19 @@ export default defineConfig(({ mode }) =>  ({
   build: {
     outDir: "build", // O Vite por padrão gera o build na pasta "dist"
   },
-	define: {	
-    'process.env': {},
-    'process.env.NODE_ENV': JSON.stringify(mode),
-  },
   resolve: {
     alias: {
       '@components': path.resolve(__dirname, './src/components'),
       '@context': path.resolve(__dirname, './src/context'),
+    }
+  },
+  server: {
+    proxy: {
+      // proxy all requests starting with /api to localhost:4000
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+      }
     }
   },
 }));
