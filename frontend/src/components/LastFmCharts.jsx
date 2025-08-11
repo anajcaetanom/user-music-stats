@@ -18,7 +18,8 @@ export const LastFmCharts = ({charts}) => {
 
   return (
     <div> 
-      <div className="center">
+      <div className="msn-header">
+        
         <p><strong> {username.toUpperCase()}'s Top {categoryMap[category]} in the {timespanMap[timespan]}. </strong></p>
       </div>
       <div className="spacer" />

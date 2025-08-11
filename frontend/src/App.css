@@ -50,7 +50,7 @@ html, body {
   z-index: 2;
   max-height: 90vh;
   max-width: 80vw;
-  margin-top: auto;
+  margin-top: 15vh;
   margin-bottom: auto;
   display: flex;
   flex-direction: column;
@@ -69,14 +69,25 @@ html, body {
   margin-bottom: auto;
 }
 
-.divider {
+.grid_3 {
+  display: grid;
+  grid-template-rows: 1fr 2fr 1fr;
+}
+
+.divider-top {
   width: 100%;
   text-align: center;
   overflow: hidden;
-  position: fixed;
+  align-self: start;
+  white-space: nowrap;
+  font-size: 20px;
 }
 
-.divider span {
+.divider-bottom {
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  align-self: end;
   white-space: nowrap;
   font-size: 20px;
 }
@@ -88,6 +99,19 @@ h4 {
 
 .text {
   font-family: Tahoma, Arial, sans-serif !important;
+}
+
+.lastfm_form {
+  min-width: 60vw;
+}
+
+.msn-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(to right, #c7dcf4, #e8f0fb);
+  padding: 8px;
+  border-bottom: 1px solid #a5b3c3;
 }
 
 .charts {

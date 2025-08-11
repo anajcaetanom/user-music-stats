@@ -12,27 +12,26 @@ export const ChooseSource = ({setSource}) => {
   };
 
   return (
-    <div>
-      <div 
-        className="divider"
-        style={{alignItems: 'top', marginBottom: '2vh', marginTop: '0px'}}
-      >
+    <div className="grid_3">
+      <div className="divider-top">
         <span>✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦</span>
       </div>
-      <h4><strong>Welcome to WinCharts App!</strong></h4>
-      <div className="text">
-        <p>Discover your top artists, tracks, and albums over any time period, all in a nostalgic Windows 98 style.</p>
-        <p>Choose your data source to get started:</p>
+      <div>
+        <h4><strong>Welcome to WinCharts App!</strong></h4>
+        <div className="text">
+          <p>Discover your top artists, tracks, and albums over any time period, all in a nostalgic Windows 98 style.</p>
+          <p>Choose your data source to get started:</p>
+        </div>
+        <div className="center">
+          <button onClick={handleSpotifyClick}>
+            Spotify
+          </button>
+          <button onClick={() => setSource("lastfm")}>
+            LastFM
+          </button>
+        </div>
       </div>
-      <div className="center">
-        <button onClick={handleSpotifyClick}>
-          Spotify
-        </button>
-        <button onClick={() => setSource("lastfm")}>
-          LastFM
-        </button>
-      </div>
-      <div className="divider">
+      <div className="divider-bottom">
         <span>✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦ . ⁺ . ✦</span>
       </div>
     </div>

@@ -76,10 +76,10 @@ export const LastFmForm = ({setCharts}) => {
   return (
     <form onSubmit={LastFmHandleSubmit}>
 
-      <div>
+      <div className="lastfm_form">
         <div className="center">
           <img 
-            src="user-icon.jpg" 
+            src="/user-icon.jpg" 
             alt="user icon" 
             style={{ width: '11vh', borderRadius: '8px', border: '1px solid gray', margin: '2vh'}}
           />
@@ -88,6 +88,7 @@ export const LastFmForm = ({setCharts}) => {
           <label htmlFor="lastfm_username">LastFM User:</label>
           <input id="lastfm_username" type="text" value={username} onChange={changeUsername} required />
         </div>
+        <div className="spacer" style={{marginBottom: "1vh"}}></div>
         <fieldset>
           <legend>Timespan</legend>
           <div className="field-row">
@@ -126,7 +127,7 @@ export const LastFmForm = ({setCharts}) => {
         </fieldset>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '8px' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '8px', marginBottom: '1vh' }}>
         <button type="submit" aria-label="submit" disabled={ !username || !timespan || !category }>
           Generate Chart
         </button>
