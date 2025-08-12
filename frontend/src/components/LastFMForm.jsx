@@ -95,7 +95,7 @@ export const LastFmForm = ({setCharts}) => {
         console.error('Erro ao configurar a requisição', error.message);
       }
     } finally {
-      await getProfilePic({ preventDefault: () => {} });
+      //await getProfilePic({ preventDefault: () => {} });
       setIsLoading(false);
     }
   };

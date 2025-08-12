@@ -22,14 +22,14 @@ export const LastFmCharts = ({charts}) => {
     <div> 
       <div className="msn-header">
         <div className="profile-pic">
-          <img src={profilePic}/>
+          <img src="/dog-music.jpg" />
         </div>
         <div className="text">
           <div className="user-name">
             <p><strong>{usernameFormatado}</strong> (Online) </p>
           </div>
           <div className="user-description">
-            <p> {username.toUpperCase()}'s Top {categoryMap[category]} in the {timespanMap[timespan]}. </p>
+            <p> my top {category} in the {timespanMap[timespan]} ˋ°•*⁀➷ </p>
           </div>
         </div>
       </div>

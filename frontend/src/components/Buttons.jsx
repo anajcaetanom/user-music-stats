@@ -2,7 +2,7 @@ import axios from "axios";
 import { useData } from "@context/DataContext";
 import { useUi } from "@context/UiContext";
 
-export const HomeButton = ({setCharts, setSource}) => {
+export const HomeButton = ({ setCharts, setSource }) => {
   const { setShowResults, setIsLoading } = useUi();
   const { setUsername, setTimespan, setCategory } = useData();
 
@@ -25,7 +25,7 @@ export const HomeButton = ({setCharts, setSource}) => {
   };
 
   return (
-    <div className="center">
+    <div className="center" style={{ marginTop: '1vh' }}>
       <button onClick={resetValues}>Go Home</button>
     </div>
   );
