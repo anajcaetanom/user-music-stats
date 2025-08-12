@@ -86,6 +86,28 @@ async function getUserTopTracks(
     
 }
 
+async function getUserProfilePic(username) {
+    try {
+        const response = await axios.get(baseUrl, {
+            params: {
+                method: 'user.getInfo',
+                user: username,
+                api_key: LASTFM_API_KEY,
+                format: 'json'
+            }
+        });
+
+        const images = response.data?.user?.image || [];
+        const imageObj = [...images].reverse().find(img => img['#text']);
+
+        return imageObj?.['#text'] || null;
+
+    } catch (error) {
+        console.error('error when trying to fetch user profile image: ', error);
+        return null;
+    }
+}
+
 ///////////// Routes /////////////
 
 router.get('/top-artists/:username', async (req, res) => {
@@ -126,5 +148,17 @@ router.get('/top-tracks/:username', async (req, res) => {
 
     res.json(data);
 });
+
+router.get('/profile-pic/:username', async (req, res) => {
+    const username = req.params.username;
+
+    const imageUrl = await getUserProfilePic(username);
+
+    if (!imageUrl) {
+        return res.status(404).json({error: 'Profile image not found'});
+    }
+
+    res.json({ username, imageUrl });
+})
 
 module.exports = router;

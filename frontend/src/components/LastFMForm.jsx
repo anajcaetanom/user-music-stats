@@ -11,6 +11,7 @@ export const LastFmForm = ({setCharts}) => {
     setTimespan,
     category,
     setCategory,
+    setProfilePic
   } = useData();
   const { setShowResults, setIsLoading} = useUi();
 
@@ -26,6 +27,31 @@ export const LastFmForm = ({setCharts}) => {
     const selectedCategory = event.target.id;
     setCategory(selectedCategory);
   }
+
+  const getProfilePic = async (event) => {
+    event.preventDefault();
+    
+    try {
+      const baseUrl = import.meta.env.VITE_PROXY_LASTFM_URL;
+      const url = `${baseUrl}/profile-pic/${username}`;
+
+      const res = await axios.get(url);
+
+      setProfilePic(res.data.imageUrl);
+
+    } catch (error) {
+      if (error.response) {
+        console.error('Resposta do servidor com erro:', error.response.data);
+        console.error('Código do erro:', error.response.status);
+      } else if (error.request) {
+        console.error('A requisição foi feita, mas não houve resposta', error.request);
+      } else {
+        console.error('Erro ao configurar a requisição', error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const LastFmHandleSubmit = async (event) => {
     event.preventDefault();
@@ -69,6 +95,7 @@ export const LastFmForm = ({setCharts}) => {
         console.error('Erro ao configurar a requisição', error.message);
       }
     } finally {
+      await getProfilePic({ preventDefault: () => {} });
       setIsLoading(false);
     }
   };

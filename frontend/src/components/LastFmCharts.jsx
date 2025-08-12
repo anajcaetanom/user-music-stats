@@ -1,7 +1,9 @@
 import { useData } from "@context/DataContext";
 
 export const LastFmCharts = ({charts}) => {
-  const { username, timespan, category} = useData();
+  const { username, timespan, category, profilePic} = useData();
+
+  const usernameFormatado = username.charAt(0).toUpperCase() + username.slice(1);
 
   const categoryMap = {
     tracks: "Tracks",
@@ -19,8 +21,17 @@ export const LastFmCharts = ({charts}) => {
   return (
     <div> 
       <div className="msn-header">
-        
-        <p><strong> {username.toUpperCase()}'s Top {categoryMap[category]} in the {timespanMap[timespan]}. </strong></p>
+        <div className="profile-pic">
+          <img src={profilePic}/>
+        </div>
+        <div className="text">
+          <div className="user-name">
+            <p><strong>{usernameFormatado}</strong> (Online) </p>
+          </div>
+          <div className="user-description">
+            <p> {username.toUpperCase()}'s Top {categoryMap[category]} in the {timespanMap[timespan]}. </p>
+          </div>
+        </div>
       </div>
       <div className="spacer" />
       <div className="charts">

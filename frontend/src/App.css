@@ -106,8 +106,8 @@ h4 {
 }
 
 .msn-header {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
   gap: 10px;
   background: linear-gradient(to right, #c7dcf4, #e8f0fb);
   padding: 8px;

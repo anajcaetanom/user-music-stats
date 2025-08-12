@@ -6,7 +6,8 @@ export const DataProvider = ({ children }) => {
     const [username, setUsername] = useState("");
     const [timespan, setTimespan] = useState("");
     const [category, setCategory] = useState("");
-    
+    const [profilePic, setProfilePic] = useState("");
+     
     return (
         <DataContext.Provider value ={{
             username,
@@ -14,7 +15,9 @@ export const DataProvider = ({ children }) => {
             timespan,
             setTimespan,
             category,
-            setCategory
+            setCategory,
+            profilePic,
+            setProfilePic
         }}>
             {children}
         </DataContext.Provider>
