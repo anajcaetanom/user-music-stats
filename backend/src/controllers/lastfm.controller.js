@@ -1,0 +1,1 @@
+const lastfmService = require('../services/lastfm.service');
