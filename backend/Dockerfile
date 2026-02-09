@@ -12,10 +12,9 @@ RUN npm install
 
 # Copy the rest of the application code
 COPY . .
-COPY ./src . 
 
 # Expose the port the backend runs on
 EXPOSE 4000
 
 # Start the application
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]
