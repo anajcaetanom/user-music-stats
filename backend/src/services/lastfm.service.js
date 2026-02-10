@@ -39,7 +39,7 @@ async function fetchUserProfilePic(username) {
     const imageUrl = await lastfmClient.getUserProfilePic(username);
 
     if (!imageUrl) {
-        throw new Error('Profile image not found');
+        throw new Error('Profile image not found.');
     }
 
     return imageUrl;

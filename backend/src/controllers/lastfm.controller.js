@@ -14,8 +14,8 @@ async function listUserTopArtists(req, res) {
         res.json(data);
 
     } catch (err) {
-        if (err.message === 'Username is missing' ||
-            err.message === 'Period is missing') {
+        if (err.message === 'Username is missing.' ||
+            err.message === 'Period is missing.') {
             return res.status(400).json({ error: err.message });
         }
         if (err.isAxiosError) {
@@ -25,7 +25,9 @@ async function listUserTopArtists(req, res) {
         }
         return res.status(500).json({
             error: 'Internal server error'
-        });
+        }); 
+
+        
     }
 }
 
@@ -43,8 +45,8 @@ async function listUserTopAlbums(req, res) {
         res.json(data);
 
     } catch (err) {
-        if (err.message === 'Username is missing' ||
-            err.message === 'Period is missing') {
+        if (err.message === 'Username is missing.' ||
+            err.message === 'Period is missing.') {
             return res.status(400).json({ error: err.message });
         }
         if (err.isAxiosError) {
@@ -72,8 +74,8 @@ async function listUserTopTracks(req, res) {
         res.json(data);
 
     } catch (err) {
-        if (err.message === 'Username is missing' ||
-            err.message === 'Period is missing') {
+        if (err.message === 'Username is missing.' ||
+            err.message === 'Period is missing.') {
             return res.status(400).json({ error: err.message });
         }
         if (err.isAxiosError) {
@@ -98,8 +100,11 @@ async function listUserProfilePic(req, res) {
         res.json(data);
 
     } catch (err) {
-        if (err.message === 'Username is missing') {
+        if (err.message === 'Username is missing.') {
             return res.status(400).json({ error: err.message });
+        }
+        if (err.message === 'Profile image not found.') {
+            return res.status(404).json({ error: err.message });
         }
         if (err.isAxiosError) {
             return res.status(502).json({

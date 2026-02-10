@@ -23,3 +23,5 @@ router.get(
     '/profile-pic/:username',
     lastfmController.listUserProfilePic
 );
+
+module.exports = router;
