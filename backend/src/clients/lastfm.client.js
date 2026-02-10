@@ -1,3 +1,4 @@
+require('dotenv').config();
 const axios = require('axios');
 
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
