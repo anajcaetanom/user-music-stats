@@ -3,7 +3,7 @@ require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const axios = require('axios');
-const redis = require('./redisClient');
+const redis = require('./clients/redis.client');
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ router.get('/auth', (req, res) => {
             response_type: 'code',
             show_dialog: 'true'
         }).toString();
-    
+
     res.redirect(authURL);
 });
 
@@ -50,7 +50,7 @@ router.get('/callback', async (req, res) => {
         });
 
         const { access_token, refresh_token, expires_in } = tokenResponse.data
-        
+
         const requestId = uuidv4();
 
         await redis.set(requestId, JSON.stringify({ access_token }), {
@@ -75,7 +75,19 @@ router.get('/callback', async (req, res) => {
     }
 });
 
+async function getUserTopData(accessToken, type, time_range, limit = 10) {
+    const response = await axios.get(`https://api.spotify.com/v1/me/top/${type}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`, 
+        },
+        params: {
+            time_range,
+            limit,
+        }
+    });
 
+    return response.data
+}
 
 router.get('/top/:type', async (req, res) => {
     const { type } = req.params;
@@ -101,7 +113,15 @@ router.get('/top/:type', async (req, res) => {
     }
 });
 
+async function getUserName(accessToken) {
+    const response = await axios.get(`https://api.spotify.com/v1/me`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`, 
+        }
+    });
 
+    return response.data.display_name;
+}
 
 router.get('/userName', async (req, res) => {
     const {id} = req.query;

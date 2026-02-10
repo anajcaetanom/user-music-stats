@@ -1,10 +1,9 @@
+require('dotenv').config();
+
 const axios = require('axios');
 
-const clientId = process.env.CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
-const redirectURI = process.env.REDIRECT_URI;
 
-async function exchangeCodeForToken(code) {
+async function exchangeCodeForToken(code, clientId, clientSecret, redirectURI) {
     const tokenResponse = await axios({
         method: 'post',
         url: 'https://accounts.spotify.com/api/token',
@@ -26,7 +25,7 @@ async function exchangeCodeForToken(code) {
     return tokenResponse.data
 }
 
-async function getUserTopData(accessToken, type, time_range, limit = 10) {
+async function getUserTopData(accessToken, type, time_range, limit) {
     const response = await axios.get(`https://api.spotify.com/v1/me/top/${type}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`, 
