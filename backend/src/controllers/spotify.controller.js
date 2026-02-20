@@ -28,18 +28,20 @@ class SpotifyController {
 
     async listUserTopData(req, res) {
         const { type } = req.params;
-        const { time_range, limit = 10, id } = req.query;
+        const { time_range, id, limit: limitParam } = req.query;
+
+        const limit = Math.min(50, Math.max(1, Number(limitParam) || 10));
 
         try {
             const data = await spotifyService.fetchUserTopData(
                 req.accessToken, 
                 type,
                 time_range,
-                limit = 10
+                limit
             );
             res.json(data);
         } catch (error) {
-            this.#handleError
+            this.#handleError(res, error, 'listUserTopData');
         }
     }
 
@@ -48,7 +50,7 @@ class SpotifyController {
             const username = await spotifyService.fetchUserName(req.accessToken)
             res.json(username);
         } catch (error) {
-            this.#handleError
+            this.#handleError(res, error, 'listUserName');
         }
     }
 

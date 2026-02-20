@@ -10,7 +10,7 @@ class SpotifyService {
 
         if (!code) {
             throw new Error('Missing code.');
-        };
+        }
 
         const tokenResponse = await spotifyClient.exchangeCodeForToken(
             code, 
@@ -33,15 +33,13 @@ class SpotifyService {
     async fetchUserTopData(accessToken, type, time_range, limit) {
         if (!['artists', 'tracks'].includes(type)) {
             throw new Error("Type is invalid or missing.");
-        };
+        }
         if (!time_range) throw new Error("Time range is missing.");
-        
 
-        const data = await spotifyClient.getUserTopData(
+
+        return await spotifyClient.getUserTopData(
             accessToken, type, time_range, limit
         );
-        
-        return data;
     }
 
     async fetchUserName(accessToken) {
@@ -51,7 +49,6 @@ class SpotifyService {
 
         return userProfileData.display_name;
     }
-
 }
 
 module.exports = new SpotifyService();

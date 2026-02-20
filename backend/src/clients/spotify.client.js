@@ -52,10 +52,7 @@ class SpotifyClient {
 
         return response.data;
     }
-
 }
-
-
 
 
 module.exports = new SpotifyClient();

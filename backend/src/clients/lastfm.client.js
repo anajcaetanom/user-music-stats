@@ -1,90 +1,95 @@
 require('dotenv').config();
 const axios = require('axios');
 
-const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
-const baseUrl = 'https://ws.audioscrobbler.com/2.0/';
 
+class LastfmClient {
+    constructor() {
+        this.LASTFM_API_KEY = process.env.LASTFM_API_KEY;
+        this.baseUrl = 'https://ws.audioscrobbler.com/2.0/';
+    }
 
-async function getUserTopArtists(
-    username,
-    limit = 10,
-    period
-) {
+    async #get(method, params) {
+        const response = await axios.get(this.baseUrl, {
+            params: {
+                method: method,
+                api_key: this.LASTFM_API_KEY,
+                format: 'json',
+                ...params
+            }
+        });
 
-    const response = await axios.get(baseUrl, {
-        params: {
-            method: 'user.getTopArtists',
-            user: username,
-            api_key: LASTFM_API_KEY,
-            format: 'json',
-            limit,
-            period
-        }
-    });
+        return response.data;
+    }
 
-    return response.data.topartists.artist;
+    async getUserTopArtists(
+        username,
+        limit = 10,
+        period
+    ) {
 
+        const data = await this.#get(
+            'user.getTopArtists',
+            {
+                user: username,
+                limit: limit,
+                period: period,
+            }
+        )
+
+        return data.topartists.artist;
+    }
+
+    async getUserTopAlbums(
+        username,
+        limit = 10,
+        period
+    ) {
+
+        const data = await this.#get(
+            'user.getTopAlbums',
+            {
+                user: username,
+                limit: limit,
+                period: period,
+            }
+        )
+
+        return data.topalbums.album;
+    }
+
+    async getUserTopTracks(
+        username,
+        limit = 10,
+        period
+    ) {
+
+        const data = await this.#get(
+            'user.getTopTracks',
+            {
+                user: username,
+                limit: limit,
+                period: period,
+            }
+        )
+
+        return data.toptracks.track;
+    }
+
+    async getUserProfilePic(username) {
+
+        const data = await this.#get(
+            'user.getInfo',
+            {
+                user: username,
+            }
+        )
+
+        const images = data.user?.image || [];
+        const imageObj = [...images].reverse().find(img => img['#text']);
+
+        return imageObj?.['#text'] || null;
+    }
 }
 
-async function getUserTopAlbums(
-    username,
-    limit = 10,
-    period 
-) {
 
-    const response = await axios(baseUrl, {
-        params: {
-            method: 'user.getTopAlbums',
-            user: username,
-            api_key: LASTFM_API_KEY,
-            format: 'json',
-            limit,
-            period
-        }
-    });
-
-    return response.data.topalbums.album;
-}
-
-async function getUserTopTracks(
-    username,
-    limit = 10,
-    period
-) {
-
-    const response = await axios.get(baseUrl, {
-        params: {
-            method: 'user.getTopTracks',
-            user: username,
-            api_key: LASTFM_API_KEY,
-            format: 'json',
-            limit,
-            period
-        }
-    });
-
-    return response.data.toptracks.track;
-}
-
-async function getUserProfilePic(username) {
-    const response = await axios.get(baseUrl, {
-        params: {
-            method: 'user.getInfo',
-            user: username,
-            api_key: LASTFM_API_KEY,
-            format: 'json'
-        }
-    });
-
-    const images = response.data?.user?.image || [];
-    const imageObj = [...images].reverse().find(img => img['#text']);
-
-    return imageObj?.['#text'] || null;
-}
-
-module.exports = {
-    getUserTopArtists,
-    getUserTopAlbums,
-    getUserTopTracks,
-    getUserProfilePic
-}
+module.exports = new LastfmClient();
