@@ -133,7 +133,7 @@ describe('LastFM Service', () => {
         });
 
         it('should throw error if client returns null', async () => {
-            lastfmClient.getUserProfilePic.mockResolvedValue(null);
+            lastfmClient.getUserProfileData.mockResolvedValue(null);
 
             await expect(lastfmService.fetchUserProfilePic('ana'))
                 .rejects
@@ -141,7 +141,9 @@ describe('LastFM Service', () => {
         });
 
         it('should return image URL if client returns value', async () => {
-            lastfmClient.getUserProfilePic.mockResolvedValue('http://image.url/img.png');
+            lastfmClient.getUserProfileData.mockResolvedValue({
+                image: [{ '#text': 'http://image.url/img.png' }]
+            });
 
             const result = await lastfmService.fetchUserProfilePic('ana');
 

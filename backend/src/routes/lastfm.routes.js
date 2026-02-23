@@ -5,23 +5,22 @@ const router = express.Router();
 
 router.get(
     '/top-artists/:username',
-    lastfmController.listUserTopArtists
+    (req, res) => lastfmController.listUserTopArtists(req, res)
 );
-
 
 router.get(
     '/top-albums/:username',
-    lastfmController.listUserTopAlbums
+    (req, res) => lastfmController.listUserTopAlbums(req, res)
 );
 
 router.get(
     '/top-tracks/:username',
-    lastfmController.listUserTopTracks
+    (req, res) => lastfmController.listUserTopTracks(req, res)
 );
 
 router.get(
     '/profile-pic/:username',
-    lastfmController.listUserProfilePic
+    (req, res) => lastfmController.listUserProfilePic(req, res)
 );
 
 module.exports = router;

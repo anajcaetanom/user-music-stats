@@ -75,7 +75,7 @@ class LastfmClient {
         return data.toptracks.track;
     }
 
-    async getUserProfilePic(username) {
+    async getUserProfileData(username) {
 
         const data = await this.#get(
             'user.getInfo',
@@ -84,10 +84,7 @@ class LastfmClient {
             }
         )
 
-        const images = data.user?.image || [];
-        const imageObj = [...images].reverse().find(img => img['#text']);
-
-        return imageObj?.['#text'] || null;
+        return data.user;
     }
 }
 

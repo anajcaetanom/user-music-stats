@@ -42,7 +42,7 @@ describe('LastFM Controller + Router', () => {
                 .get('/api/lastfm/top-artists/ana');
 
             expect(res.status).toBe(400);
-            expect(res.body.error).toBeDefined();
+            expect(res.text).toContain('missing');
         });
     });
 

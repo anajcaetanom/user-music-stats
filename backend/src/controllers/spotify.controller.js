@@ -28,7 +28,7 @@ class SpotifyController {
 
     async listUserTopData(req, res) {
         const { type } = req.params;
-        const { time_range, id, limit: limitParam } = req.query;
+        const { time_range, limit: limitParam } = req.query;
 
         const limit = Math.min(50, Math.max(1, Number(limitParam) || 10));
 
