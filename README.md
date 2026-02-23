@@ -25,49 +25,35 @@ This project is a React application that lets you view your personal music stati
 - Custom CSS + 98.css for a Windows 98-style interface
 
 
-## Project Structure
+## Backend Architecture
 
-- `/src/components` — React UI components
-- `/src/context` — Contexts for global state
-- `/src/App.js` — Main component
-- `/src/App.css` — Main styles
+The backend follows a layered architecture with clear separation of responsibilities:
 
-## How to run locally
+- **Routes** — Define API endpoints and attach middlewares.
+- **Controllers** — Handle HTTP requests/responses and call services.
+- **Services** — Contain business logic and data processing.
+- **Clients** — Communicate with external APIs (Spotify and Last.fm).
+- **Middlewares** — Handle cross-cutting concerns such as authentication and error handling.
 
-1. Clone the repository:
+**Flow:**  
+Route → Middleware → Controller → Service → Client → External API
 
-  ```bash
-  git clone https://github.com/your-user/your-repo.git
-  ```
+**Structure:**
+/src  
+├── clients    
+├── controllers  
+├── middlewares  
+├── routes
+└── services
 
-1. Navigate to the backend folder:
 
-  ```bash
-  cd user-music-stats/backend
-  ```
+## Testing
 
-1. Create the `.env` file and fill in the required fields:
+The backend includes:
+- **Unit tests** for services
+- **Integration tests** for API routes
 
-  ```bash
-  cp .env.example .env
-  ```
-
-1. Install backend dependencies and run it:
-
-  ```bash
-  npm install
-  npm start
-  ```
-
-1. Repeat the same steps in the frontend folder:
-
-  ```bash
-  cd ../frontend
-  cp .env.example .env
-  npm install
-  npm start 
-  ```
-
+Tests are written using **Jest** and **Supertest**.
 
 
 ## License
