@@ -21,7 +21,7 @@ class SpotifyController {
     async callback(req, res) {
         const { code } = req.query
 
-        const requestId = spotifyService.handleCallback(code);
+        const requestId = await spotifyService.handleCallback(code);
 
         res.redirect(`${process.env.FRONTEND_URI}/?spotifyAuth=success&id=${requestId}`);
     }
