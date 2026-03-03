@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-const DataContext = createContext();
+const DataContext = createContext(null);
 
 export const DataProvider = ({ children }) => {
     const [username, setUsername] = useState("");

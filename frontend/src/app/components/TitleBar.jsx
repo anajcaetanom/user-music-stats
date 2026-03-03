@@ -1,15 +1,15 @@
-import { useUi } from "@context/UiContext";
+import {useUi} from "../../shared/context/UiContext";
 
 export const TitleBar = () => {
   const { setIsAppOpen, setIsClosing } = useUi();
 
-	async function closeApp() {
+	function closeApp() {
     setIsClosing(true);
     setTimeout(() => {
       setIsAppOpen(false);
       setIsClosing(false);
     }, 150);
-	}
+  }
 
   return (
     <div className="title-bar">
