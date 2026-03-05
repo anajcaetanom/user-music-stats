@@ -1,6 +1,7 @@
 import {useUi} from "../../../shared/context/UiContext";
 import {useData} from "../../../shared/context/DataContext";
-import {fetchUserName} from "../services/spotifyService";
+import {fetchCategory, fetchUserName} from "../services/spotifyService";
+import {useEffect, useState} from "react";
 
 
 export const SpotifyForm = ({ requestId, setCharts }) => {
@@ -11,7 +12,13 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
     username, setUsername, 
   } = useData();
 
-  setUsername(fetchUserName(requestId));
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchUserName(requestId)
+      .then(setUsername)
+      .catch()
+  }, [requestId]);
 
   const changeTimespan = (event) => {
     const selectedTimespan = event.target.id;
@@ -22,15 +29,17 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
     setCategory(selectedCategory);
   }
 
+
+
   const SpotifyHandleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
     
     try {
 
+      const data = fetchCategory(requestId, category, timespan);
 
-
-      setCharts(res.data);
+      setCharts(data);
       setShowResults(true);
 
     } catch (error) {

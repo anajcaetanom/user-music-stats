@@ -31,29 +31,7 @@ export const LastFmForm = ({setCharts}) => {
     setIsLoading(true);
 
     try {
-      const baseURL = import.meta.env.VITE_PROXY_LASTFM_URL;
-      let url = '';
 
-      switch (category) {
-        case 'artists':
-          url = `${baseURL}/top-artists/${username}`;
-          break;
-        case 'albums':
-          url = `${baseURL}/top-albums/${username}`;
-          break;
-        case 'tracks':
-          url = `${baseURL}/top-tracks/${username}`;
-          break;
-        default:
-          throw new Error('Categoria inválida');
-      }
-
-      const res = await axios.get(url, {
-        params: {
-          period: timespan,
-          limit: 10
-        }
-      });
 
       setCharts(res.data);
       setShowResults(true);
@@ -68,7 +46,6 @@ export const LastFmForm = ({setCharts}) => {
         console.error('Erro ao configurar a requisição', error.message);
       }
     } finally {
-      //await getProfilePic({ preventDefault: () => {} });
       setIsLoading(false);
     }
   };
