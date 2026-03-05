@@ -1,15 +1,10 @@
-import { useData } from "@context/DataContext";
+import {useData} from "../../../shared/context/DataContext";
+
 
 export const LastFmCharts = ({charts}) => {
   const { username, timespan, category, profilePic} = useData();
 
   const usernameFormatado = username.charAt(0).toUpperCase() + username.slice(1);
-
-  const categoryMap = {
-    tracks: "Tracks",
-    artists: "Artists",
-    albums: "Albums"
-  };
 
   const timespanMap = {
     "7day": "last week",
@@ -22,7 +17,7 @@ export const LastFmCharts = ({charts}) => {
     <div> 
       <div className="msn-header">
         <div className="profile-pic">
-          <img src="/dog-music.jpg" />
+          <img src="/dog-music.jpg"  alt={'cachorro de fone'}/>
         </div>
         <div className="text">
           <div className="user-name">

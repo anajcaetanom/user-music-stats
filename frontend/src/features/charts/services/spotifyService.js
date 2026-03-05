@@ -1,4 +1,5 @@
 import axios from "axios";
+import {handleApiError} from "../../../shared/utils/handleApiError";
 
 const baseURL = import.meta.env.VITE_PROXY_SPOTIFY_URL;
 
@@ -7,13 +8,8 @@ export const cleanRedis = async () => {
     const res = await axios.get(`${baseURL}/cleanRedis`);
     return res.data;
 
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message || "Erro ao pegar charts spotify."
-      );
-    }
-    throw new Error("Erro inesperado");
+  } catch (err) {
+    handleApiError(err);
   }
 }
 
@@ -27,13 +23,8 @@ export const fetchUserName = async (requestId) => {
 
     return res.data;
 
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message || "Erro ao pegar username spotify."
-      );
-    }
-    throw new Error("Erro inesperado");
+  } catch (err) {
+    handleApiError(err);
   }
 };
 
@@ -51,13 +42,8 @@ export const fetchCategory = async (requestId, category, timespan) => {
 
     return res.data;
 
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message || "Erro ao pegar spotify charts."
-      );
-    }
-    throw new Error("Erro inesperado");
+  } catch (err) {
+    handleApiError(err);
   }
 }
 
