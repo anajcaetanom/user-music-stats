@@ -7,6 +7,7 @@ import {SpotifyForm} from "./components/SpotifyForm";
 import {LastFmForm} from "./components/LastFMForm";
 import {ChooseSource} from "./components/ChooseSource";
 import {HomeButton} from "./components/HomeButton";
+import {useResetValues} from "./hooks/useResetValues";
 
 
 const SOURCES = {
@@ -14,43 +15,34 @@ const SOURCES = {
   LASTFM: "lastfm",
 };
 
-const BaseLayout = ({ children, setCharts, setSource}) => (
+const BaseLayout = ({ children, resetValues}) => (
   <>
     {children}
     <div className="spacer" />
     <HomeButton
-      setCharts={setCharts}
-      setSource={setSource}
+      resetValues={resetValues}
     />
   </>
 );
 
 const ChartsPage = () => {
   const {
-    setShowResults,
-    showResults,
     isLoading,
   } = useUi();
 
-  const [requestId] = useState("");
+  const [showResults, setShowResults] = useState(false);
+  const [requestId, setRequestId] = useState("");
   const [source, setSource] = useState("");
   const [charts, setCharts] = useState([]);
 
-  function renderSourceChart() {
-    switch (source) {
-      case SOURCES.SPOTIFY:
-        return <SpotifyCharts
-          charts={charts}
-          requestId={requestId}
-        />
-      case SOURCES.LASTFM:
-        return <LastFmCharts
-          charts={charts}
-        />
-      default:
-        return <p>Source error.</p>
-    }
-  }
+  const step =
+    isLoading
+      ? "loading"
+      : !source
+      ? "choose"
+      : !showResults
+      ? "form"
+      : "results";
 
   function renderSourceForm() {
     switch (source) {
@@ -68,38 +60,55 @@ const ChartsPage = () => {
     }
   }
 
-  if (isLoading) {
-    return (
-      <BaseLayout setCharts={setCharts} setSource={setSource}>
-        <p>Loading...</p>
-      </BaseLayout>
-    );
+  function renderSourceChart() {
+    switch (source) {
+      case SOURCES.SPOTIFY:
+        return <SpotifyCharts
+          charts={charts}
+          requestId={requestId}
+        />
+      case SOURCES.LASTFM:
+        return <LastFmCharts
+          charts={charts}
+        />
+      default:
+        return <p>Source error.</p>
+    }
   }
 
-  if (!showResults) {
-    return (
-      !source ? (
+  const resetValues = useResetValues(setCharts, setSource);
+
+  switch (step) {
+    case 'loading' :
+      return (
+        <BaseLayout resetValues={resetValues}>
+          <p>Loading...</p>
+        </BaseLayout>
+      );
+    case 'choose':
+      return (
         <ChooseSource
           setSource={setSource}
         />
-      ) : (
-        <BaseLayout setCharts={setCharts} setSource={setSource}>
+      )
+    case 'form':
+      return (
+        <BaseLayout resetValues={resetValues}>
           {renderSourceForm(source)}
         </BaseLayout>
       )
-    )
+    case 'results':
+      return (
+        <BaseLayout resetValues={resetValues}>
+          {renderSourceChart()}
+          <div className="spacer" />
+          <BackToCategoriesButton
+            setShowResults={setShowResults}
+            setCharts={setCharts}
+          />
+        </BaseLayout>
+      )
   }
-
-  return (
-    <BaseLayout setCharts={setCharts} setSource={setSource}>
-      {renderSourceChart()}
-      <div className="spacer" />
-      <BackToCategoriesButton
-        setShowResults={setShowResults}
-        setCharts={setCharts}
-      />
-    </BaseLayout>
-  )
 };
 
 export default ChartsPage;

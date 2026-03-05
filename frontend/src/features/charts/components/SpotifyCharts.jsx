@@ -1,31 +1,14 @@
-import axios from "axios";
-import { useData } from "@context/DataContext";
-import { useEffect } from "react";
+import {useData} from "../../../shared/context/DataContext";
+import {fetchUserName} from "../services/spotifyService";
+
 
 export const SpotifyCharts = ({charts, requestId}) => {
   const { username, setUsername, timespan, category} = useData();
   const data = charts.items;
 
-  useEffect(() => {
-    const fetchUserName = async () => {
-      try {
-        const baseURL = import.meta.env.VITE_PROXY_SPOTIFY_URL;
-        let url = `${baseURL}/userName`;
-        const res = await axios.get(url, {
-          params: {
-            id: requestId
-          }
-        });
-        setUsername(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  setUsername(fetchUserName(requestId));
 
-    fetchUserName();
-  }, [requestId]);
-  
-  // console.log(data);
+
 
   const categoryMap = {
     tracks: "Tracks",

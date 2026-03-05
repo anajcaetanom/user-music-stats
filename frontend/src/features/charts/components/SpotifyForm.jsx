@@ -1,8 +1,7 @@
-/////////// Spotify stuff ///////////
-import { useData } from "@context/DataContext";
-import { useUi } from "@context/UiContext";
-import { useEffect } from "react";
-import axios from "axios";
+import {useUi} from "../../../shared/context/UiContext";
+import {useData} from "../../../shared/context/DataContext";
+import {fetchUserName} from "../services/spotifyService";
+
 
 export const SpotifyForm = ({ requestId, setCharts }) => {
   const { setShowResults, setIsLoading} = useUi();
@@ -12,25 +11,7 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
     username, setUsername, 
   } = useData();
 
-  useEffect(() => {
-    const fetchUserName = async () => {
-      try {
-        const baseURL = import.meta.env.VITE_PROXY_SPOTIFY_URL;
-        let url = `${baseURL}/userName`;
-        const res = await axios.get(url, {
-          params: {
-            id: requestId
-          }
-        });
-        setUsername(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUserName();
-    // eslint-disable-next-line
-  }, [requestId]);
+  setUsername(fetchUserName(requestId));
 
   const changeTimespan = (event) => {
     const selectedTimespan = event.target.id;
@@ -46,16 +27,8 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
     setIsLoading(true);
     
     try {
-      const baseURL = import.meta.env.VITE_PROXY_SPOTIFY_URL;
-      let url = `${baseURL}/top/${category}`;
 
-      const res = await axios.get(url, {
-        params: {
-          time_range: timespan,
-          limit: 10,
-          id: requestId
-        }
-      });
+
 
       setCharts(res.data);
       setShowResults(true);
