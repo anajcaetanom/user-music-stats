@@ -13,7 +13,7 @@ class RedisClient {
     }
 
     async disconnect() {
-        await this.client.disconnect();
+        this.client.destroy();
     }
 
     // Métodos delegados para manter a interface limpa
@@ -23,6 +23,10 @@ class RedisClient {
 
     async set(key, value, options) {
         return await this.client.set(key, value, options);
+    }
+
+    async del(key) {
+      return await this.client.del(key);
     }
 }
 

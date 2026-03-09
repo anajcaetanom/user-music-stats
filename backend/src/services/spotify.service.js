@@ -49,6 +49,23 @@ class SpotifyService {
 
         return userProfileData.display_name;
     }
+
+  async getToken(requestId) {
+
+    if (!requestId || typeof requestId !== "string") {
+      throw new Error("Invalid requestId");
+    }
+
+    const data = await redis.get(requestId);
+
+    if (!data) {
+      throw new Error("Token not found or expired");
+    }
+
+    await redis.del(requestId);
+
+    return JSON.parse(data);
+  }
 }
 
 module.exports = new SpotifyService();

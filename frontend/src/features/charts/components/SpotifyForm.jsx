@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 
 
 export const SpotifyForm = ({ requestId, setCharts }) => {
-  const { setShowResults, setIsLoading} = useUi();
+  const { setShowResults, isLoading, setIsLoading} = useUi();
   const { 
     timespan, setTimespan,
     category, setCategory, 
@@ -17,7 +17,7 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
   useEffect(() => {
     fetchUserName(requestId)
       .then(setUsername)
-      .catch()
+      .catch(setError)
   }, [requestId]);
 
   const changeTimespan = (event) => {
@@ -29,28 +29,23 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
     setCategory(selectedCategory);
   }
 
-
-
   const SpotifyHandleSubmit = async (event) => {
     event.preventDefault();
+
+    if (isLoading) return;
+
     setIsLoading(true);
     
     try {
 
-      const data = fetchCategory(requestId, category, timespan);
+      const data = await fetchCategory(requestId, category, timespan);
 
-      setCharts(data);
-      setShowResults(true);
-
-    } catch (error) {
-      if (error.response) {
-        console.error('Resposta do servidor com erro:', error.response.data);
-        console.error('Código do erro:', error.response.status);
-      } else if (error.request) {
-        console.error('A requisição foi feita, mas não houve resposta', error.request);
-      } else {
-        console.error('Erro ao configurar a requisição', error.message);
+      if (data) {
+        setCharts(data);
+        setShowResults(true);
       }
+    } catch (error) {
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +54,7 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
   return (
     <form onSubmit={SpotifyHandleSubmit}>
       <div className="center">
-        <p><strong> user: {username.toUpperCase()}</strong></p>
+        <p><strong> user: {username?.toUpperCase()}</strong></p>
       </div>
       <fieldset>
         <legend>Timespan</legend>
@@ -92,7 +87,7 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
       </fieldset>
 
       <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '8px' }}>
-        <button type="submit" aria-label="submit" disabled={ !timespan || !category }>
+        <button type="submit" aria-label="submit" disabled={ !timespan || !category || isLoading }>
           Generate Chart
         </button>
       </div>

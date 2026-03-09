@@ -13,6 +13,10 @@ router.get(
     (req, res) => spotifyController.callback(req, res)
 );
 
+router.get(
+  ''
+)
+
 // Rotas protegidas pelo Middleware
 router.get(
     '/top/:type',
