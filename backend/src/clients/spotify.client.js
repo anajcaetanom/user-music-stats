@@ -13,11 +13,8 @@ class SpotifyClient {
             url: 'https://accounts.spotify.com/api/token',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: 'Basic ' + Buffer
-                    .from(
-                        clientId + ':' + 
-                        clientSecret)
-                    .toString('base64'),
+                Authorization:
+                    'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64'),
             },
             data: new URLSearchParams({
                 grant_type: 'authorization_code',
@@ -26,33 +23,32 @@ class SpotifyClient {
             }).toString(),
         });
 
-        return tokenResponse.data
+        return tokenResponse.data;
     }
 
     async getUserTopData(accessToken, type, time_range, limit) {
         const response = await axios.get(`${this.apiBaseUrl}/top/${type}`, {
             headers: {
-                Authorization: `Bearer ${accessToken}`, 
+                Authorization: `Bearer ${accessToken}`,
             },
             params: {
                 time_range,
                 limit,
-            }
+            },
         });
 
-        return response.data
+        return response.data;
     }
 
     async getUserProfileData(accessToken) {
         const response = await axios.get(`${this.apiBaseUrl}`, {
             headers: {
-                Authorization: `Bearer ${accessToken}`, 
-            }
+                Authorization: `Bearer ${accessToken}`,
+            },
         });
 
         return response.data;
     }
 }
-
 
 module.exports = new SpotifyClient();

@@ -7,14 +7,13 @@ This project is a React application that lets you view your personal music stati
 - Integration with Spotify and Last.fm
 - OAuth authentication for Spotify
 - Select time range for statistics:
-  - **Spotify:** Last month, 6 months, Last year
-  - **Last.fm:** Last week, Last month, 6 months, Last year
+    - **Spotify:** Last month, 6 months, Last year
+    - **Last.fm:** Last week, Last month, 6 months, Last year
 - Select category:
-  - **Spotify:** Top Tracks, Top Artists
-  - **Last.fm:** Top Tracks, Top Artists, Top Albums
+    - **Spotify:** Top Tracks, Top Artists
+    - **Last.fm:** Top Tracks, Top Artists, Top Albums
 - Data visualization in charts and lists
 - Responsive and simple interface, inspired by Windows 98
-
 
 ## Technologies Used
 
@@ -23,7 +22,6 @@ This project is a React application that lets you view your personal music stati
 - Spotify API
 - Last.fm API
 - Custom CSS + 98.css for a Windows 98-style interface
-
 
 ## Backend Architecture
 
@@ -40,22 +38,21 @@ Route → Middleware → Controller → Service → Client → External API
 
 **Structure:**
 /src  
-├── clients    
+├── clients  
 ├── controllers  
 ├── middlewares  
 ├── routes
 └── services
 
-
 ## Testing
 
 The backend includes:
+
 - **Unit tests** for services
 - **Integration tests** for API routes
 
 Tests are written using **Jest** and **Supertest**.
 
-
 ## License
-Open-source project for educational and personal purposes.
 
+Open-source project for educational and personal purposes.

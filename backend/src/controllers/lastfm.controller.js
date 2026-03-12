@@ -1,22 +1,16 @@
 const lastfmService = require('../services/lastfm.service');
 
 class LastfmController {
-
     async listUserTopArtists(req, res) {
         try {
             const username = req.params.username;
             const { limit, period } = req.query;
 
-            const data = await lastfmService.fetchUserTopArtists(
-                username,
-                limit,
-                period
-            );
+            const data = await lastfmService.fetchUserTopArtists(username, limit, period);
 
             res.json(data);
-
         } catch (err) {
-            this.#handleError(err, res, 'listUserTopArtists')
+            this.#handleError(err, res, 'listUserTopArtists');
         }
     }
 
@@ -25,16 +19,11 @@ class LastfmController {
             const username = req.params.username;
             const { limit, period } = req.query;
 
-            const data = await lastfmService.fetchUserTopAlbums(
-                username,
-                limit,
-                period
-            );
+            const data = await lastfmService.fetchUserTopAlbums(username, limit, period);
 
             res.json(data);
-
         } catch (err) {
-            this.#handleError(err, res, 'listUserTopAlbums')
+            this.#handleError(err, res, 'listUserTopAlbums');
         }
     }
 
@@ -43,16 +32,11 @@ class LastfmController {
             const username = req.params.username;
             const { limit, period } = req.query;
 
-            const data = await lastfmService.fetchUserTopTracks(
-                username,
-                limit,
-                period
-            );
+            const data = await lastfmService.fetchUserTopTracks(username, limit, period);
 
             res.json(data);
-
         } catch (err) {
-            this.#handleError(err, res, 'listUserTopTracks')
+            this.#handleError(err, res, 'listUserTopTracks');
         }
     }
 
@@ -60,14 +44,11 @@ class LastfmController {
         try {
             const username = req.params.username;
 
-            const data = await lastfmService.fetchUserProfilePic(
-                username,
-            );
+            const data = await lastfmService.fetchUserProfilePic(username);
 
             res.json(data);
-
         } catch (err) {
-            this.#handleError(err, res, 'listUserProfilePic')
+            this.#handleError(err, res, 'listUserProfilePic');
         }
     }
 
@@ -89,7 +70,7 @@ class LastfmController {
             const status = error.response?.status || 502;
             return res.status(status).json({
                 error: 'LastFM API failure',
-                details: error.response?.data || error.message
+                details: error.response?.data || error.message,
             });
         }
 
@@ -97,7 +78,5 @@ class LastfmController {
         res.status(500).send(`Internal error during ${action}.`);
     }
 }
-
-
 
 module.exports = new LastfmController();

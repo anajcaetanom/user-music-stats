@@ -1,16 +1,13 @@
 import '../styles/App.css';
-import "98.css";
+import '98.css';
 
-import {DesktopButton} from "./components/DesktopButton";
-import ChartsPage from "../features/charts/ChartsPage";
-import {TitleBar} from "./components/TitleBar";
-import {useUi} from "../shared/context/UiContext";
-import clsx from "clsx";
-
-
+import { DesktopButton } from './components/DesktopButton';
+import ChartsPage from '../features/charts/ChartsPage';
+import { TitleBar } from './components/TitleBar';
+import { useUi } from '../shared/context/UiContext';
+import clsx from 'clsx';
 
 const App = () => {
-
   const { isAppOpen, isClosing } = useUi();
 
   return (
@@ -18,12 +15,7 @@ const App = () => {
       {!isAppOpen ? (
         <DesktopButton />
       ) : (
-          <div
-            className={clsx(
-                "window",
-                { closing: isClosing },
-            )}
-          >
+        <div className={clsx('window', { closing: isClosing })}>
           <TitleBar />
           <div className="window-body">
             <ChartsPage />
@@ -33,6 +25,5 @@ const App = () => {
     </div>
   );
 };
-
 
 export default App;

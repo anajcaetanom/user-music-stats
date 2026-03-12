@@ -3,7 +3,7 @@ const { createClient } = require('redis');
 class RedisClient {
     constructor() {
         this.client = createClient();
-        this.client.on('error', err => console.log('Redis Client Error', err));
+        this.client.on('error', (err) => console.log('Redis Client Error', err));
     }
 
     async connect() {
@@ -26,7 +26,7 @@ class RedisClient {
     }
 
     async del(key) {
-      return await this.client.del(key);
+        return await this.client.del(key);
     }
 }
 

@@ -1,4 +1,4 @@
-const redis = require ('../clients/redis.client');
+const redis = require('../clients/redis.client');
 
 const validateSpotifySession = async (req, res, next) => {
     const id = req.query.id || req.params.id;

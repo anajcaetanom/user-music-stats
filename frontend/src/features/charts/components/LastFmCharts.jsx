@@ -1,30 +1,34 @@
-import {useData} from "../../../shared/context/DataContext";
+import { useData } from '../../../shared/context/DataContext';
 
-
-export const LastFmCharts = ({charts}) => {
-  const { username, timespan, category, profilePic} = useData();
+export const LastFmCharts = ({ charts }) => {
+  const { username, timespan, category, profilePic } = useData();
 
   const usernameFormatado = username.charAt(0).toUpperCase() + username.slice(1);
 
   const timespanMap = {
-    "7day": "last week",
-    "1month": "last month",
-    "6month": "last 6 months",
-    "12month": "last year"
+    '7day': 'last week',
+    '1month': 'last month',
+    '6month': 'last 6 months',
+    '12month': 'last year',
   };
 
   return (
-    <div> 
+    <div>
       <div className="msn-header">
         <div className="profile-pic">
-          <img src="/dog-music.jpg"  alt={'cachorro de fone'}/>
+          <img src="/dog-music.jpg" alt={'cachorro de fone'} />
         </div>
         <div className="text">
           <div className="user-name">
-            <p><strong>{usernameFormatado}</strong> (Online) </p>
+            <p>
+              <strong>{usernameFormatado}</strong> (Online){' '}
+            </p>
           </div>
           <div className="user-description">
-            <p> my top {category} in the {timespanMap[timespan]} ˋ°•*⁀➷ </p>
+            <p>
+              {' '}
+              my top {category} in the {timespanMap[timespan]} ˋ°•*⁀➷{' '}
+            </p>
           </div>
         </div>
       </div>
@@ -34,10 +38,12 @@ export const LastFmCharts = ({charts}) => {
           <div>
             {charts.map((chart, index) => (
               <ul key={chart.mbid || `${chart.name}-${index}`} className="tree-view">
-                <li><strong>{index + 1}. {chart.name}</strong></li>
-                {category !== "artists" && chart.artist?.name && (
-                  <li>{chart.artist.name}</li>
-                )}
+                <li>
+                  <strong>
+                    {index + 1}. {chart.name}
+                  </strong>
+                </li>
+                {category !== 'artists' && chart.artist?.name && <li>{chart.artist.name}</li>}
                 <li>Playcount: {chart.playcount}</li>
               </ul>
             ))}

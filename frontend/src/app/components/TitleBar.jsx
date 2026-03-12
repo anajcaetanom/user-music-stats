@@ -1,9 +1,9 @@
-import {useUi} from "../../shared/context/UiContext";
+import { useUi } from '../../shared/context/UiContext';
 
 export const TitleBar = () => {
   const { setIsAppOpen, setIsClosing } = useUi();
 
-	function closeApp() {
+  function closeApp() {
     setIsClosing(true);
     setTimeout(() => {
       setIsAppOpen(false);
@@ -15,11 +15,8 @@ export const TitleBar = () => {
     <div className="title-bar">
       <div className="title-bar-text">WinCharts</div>
       <div className="title-bar-controls">
-        <button 
-          aria-label="Close" 
-          onClick={closeApp}
-        />
+        <button aria-label="Close" onClick={closeApp} />
       </div>
     </div>
-  )
-}
+  );
+};
