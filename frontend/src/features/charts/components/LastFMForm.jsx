@@ -9,7 +9,7 @@ export const LastFmForm = ({ setCharts }) => {
   const { username, setUsername,
           timespan, setTimespan,
           category, setCategory, setProfilePic } = useData();
-  const { setShowResults, setIsLoading } = useUi();
+  const { setShowResults, setIsLoading, isLoading } = useUi();
   const [errorMessage, setErrorMessage] = useState('');
 
   const changeUsername = (event) => {
@@ -155,7 +155,7 @@ export const LastFmForm = ({ setCharts }) => {
           marginBottom: '1vh',
         }}
       >
-        <button type="submit" aria-label="submit" disabled={!username || !timespan || !category}>
+        <button type="submit" aria-label="submit" disabled={!username.trim() || !timespan || !category || isLoading}>
           Generate Chart
         </button>
       </div>
