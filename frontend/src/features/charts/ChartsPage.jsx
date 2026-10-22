@@ -23,9 +23,8 @@ const BaseLayout = ({ children, resetValues }) => (
 );
 
 const ChartsPage = () => {
-  const { isLoading } = useUi();
+  const { isLoading, showResults, setShowResults } = useUi();
 
-  const [showResults, setShowResults] = useState(false);
   const [requestId, setRequestId] = useState('');
   const [source, setSource] = useState('');
   const [charts, setCharts] = useState([]);
