@@ -8,11 +8,14 @@ export const handleApiError = (error) => {
         }
 
         if (error.request) {
-            // requisição foi feita mas não houve resposta
+            // requisição foi feita, mas não houve resposta
             throw new Error('Sem resposta do servidor');
         }
 
         // erro ao configurar a requisição
         throw new Error(`Erro na requisição: ${error.message}`);
     }
+
+    // erro que não é do axios: repassa
+    throw error;
 };

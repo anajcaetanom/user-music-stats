@@ -1,12 +1,16 @@
 /////////// LastFm stuff ///////////
-import axios from 'axios';
+
 import { useData } from '../../../shared/context/DataContext';
 import { useUi } from '../../../shared/context/UiContext';
+import { fetchCategory } from '../services/lastFmService';
+import { useState } from 'react';
 
 export const LastFmForm = ({ setCharts }) => {
-  const { username, setUsername, timespan, setTimespan, category, setCategory, setProfilePic } =
-    useData();
+  const { username, setUsername,
+          timespan, setTimespan,
+          category, setCategory, setProfilePic } = useData();
   const { setShowResults, setIsLoading } = useUi();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const changeUsername = (event) => {
     const writtenUsername = event.target.value;
@@ -21,29 +25,27 @@ export const LastFmForm = ({ setCharts }) => {
     setCategory(selectedCategory);
   };
 
-  const LastFmHandleSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
+    setErrorMessage('');
 
     try {
-      setCharts(res.data);
-      setShowResults(true);
-    } catch (error) {
-      if (error.response) {
-        console.error('Resposta do servidor com erro:', error.response.data);
-        console.error('Código do erro:', error.response.status);
-      } else if (error.request) {
-        console.error('A requisição foi feita, mas não houve resposta', error.request);
-      } else {
-        console.error('Erro ao configurar a requisição', error.message);
+      const data = await fetchCategory(username, category, timespan);
+      if (data) {
+        setCharts(data);
+        setShowResults(true);
       }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={LastFmHandleSubmit}>
+    <form onSubmit={handleSubmit}>
       <div className="lastfm_form">
         <div className="center">
           <img
@@ -157,6 +159,7 @@ export const LastFmForm = ({ setCharts }) => {
           Generate Chart
         </button>
       </div>
+      {errorMessage && <p role="alert">{errorMessage}</p>}
     </form>
   );
 };

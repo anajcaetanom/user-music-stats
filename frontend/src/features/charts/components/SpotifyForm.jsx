@@ -1,13 +1,14 @@
 import { useUi } from '../../../shared/context/UiContext';
 import { useData } from '../../../shared/context/DataContext';
 import { fetchCategory, fetchUserName } from '../services/spotifyService';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const SpotifyForm = ({ requestId, setCharts }) => {
   const { setShowResults, isLoading, setIsLoading } = useUi();
   const { timespan, setTimespan, category, setCategory, username, setUsername } = useData();
 
   const [error, setError] = useState(null);
+  const submittingRef = useRef(false);
 
   useEffect(() => {
     fetchUserName(requestId).then(setUsername).catch(setError);
@@ -25,7 +26,8 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
   const SpotifyHandleSubmit = async (event) => {
     event.preventDefault();
 
-    if (isLoading) return;
+    if (submittingRef.current) return;
+    submittingRef.current = true;
 
     setIsLoading(true);
 
@@ -37,7 +39,14 @@ export const SpotifyForm = ({ requestId, setCharts }) => {
         setShowResults(true);
       }
     } catch (error) {
-      console.error(error);
+      if (error.response) {
+        console.error('Resposta do servidor com erro:', error.response.data);
+        console.error('Código do erro:', error.response.status);
+      } else if (error.request) {
+        console.error('A requisição foi feita, mas não houve resposta', error.request);
+      } else {
+        console.error('Erro ao configurar a requisição', error.message);
+      }
     } finally {
       setIsLoading(false);
     }

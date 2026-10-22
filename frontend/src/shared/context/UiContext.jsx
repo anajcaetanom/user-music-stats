@@ -6,6 +6,7 @@ export const UiProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAppOpen, setIsAppOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   return (
     <UiContext.Provider
@@ -16,6 +17,8 @@ export const UiProvider = ({ children }) => {
         setIsAppOpen,
         isClosing,
         setIsClosing,
+        showResults,
+        setShowResults
       }}
     >
       {children}

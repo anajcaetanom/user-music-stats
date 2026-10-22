@@ -5,30 +5,29 @@ const baseURL = import.meta.env.VITE_PROXY_LASTFM_URL;
 
 export const fetchProfilePic = async (username) => {
     try {
-        const url = `${baseURL}/profile-pic/${username}`;
+        const url = `${baseURL}/profile-pic/${encodeURIComponent(username)}`;
         const res = await axios.get(url);
 
         return res.data;
     } catch (err) {
         handleApiError(err);
     }
-    // erro inesperado
-    throw new Error('Erro inesperado ao buscar foto de perfil');
 };
 
 export const fetchCategory = async (username, category, timespan) => {
     try {
+        const user = encodeURIComponent(username)
         let url = '';
 
         switch (category) {
             case 'artists':
-                url = `${baseURL}/top-artists/${username}`;
+                url = `${baseURL}/top-artists/${user}`;
                 break;
             case 'albums':
-                url = `${baseURL}/top-albums/${username}`;
+                url = `${baseURL}/top-albums/${user}`;
                 break;
             case 'tracks':
-                url = `${baseURL}/top-tracks/${username}`;
+                url = `${baseURL}/top-tracks/${user}`;
                 break;
             default:
                 throw new Error('Invalid category.');
