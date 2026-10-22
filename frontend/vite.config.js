@@ -2,13 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import path from 'path';
-import EnvironmentPlugin from 'vite-plugin-environment';
 
 export default defineConfig(({ mode }) => ({
-    plugins: [react(), svgr(), EnvironmentPlugin({ all: true, prefix: 'REACT_APP_' })],
+    plugins: [react(), svgr()],
     base: '/',
     build: {
-        outDir: 'build', // O Vite por padrão gera o build na pasta "dist"
+        outDir: 'build', // O Vite por padrão gera a build na pasta "dist"
     },
     resolve: {
         alias: {
@@ -24,5 +23,10 @@ export default defineConfig(({ mode }) => ({
                 changeOrigin: true,
             },
         },
+    },
+    test: {
+        environment: 'jsdom',
+        globals: true,
+        setupFiles: './src/setupTests.js',
     },
 }));
