@@ -2,7 +2,7 @@ const { createClient } = require('redis');
 
 class RedisClient {
     constructor() {
-        this.client = createClient();
+        this.client = createClient({ url: process.env.REDIS_URL });
         this.client.on('error', (err) => console.log('Redis Client Error', err));
     }
 
@@ -16,7 +16,6 @@ class RedisClient {
         this.client.destroy();
     }
 
-    // Métodos delegados para manter a interface limpa
     async get(key) {
         return await this.client.get(key);
     }

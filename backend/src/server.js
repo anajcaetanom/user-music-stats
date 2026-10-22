@@ -1,6 +1,6 @@
 require('dotenv').config();
 const app = require('./app');
-const redis = require('/clients/redis.client');
+const redis = require('./clients/redis.client');
 
 const PORT = 4000;
 
