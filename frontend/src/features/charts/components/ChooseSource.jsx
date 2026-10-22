@@ -1,6 +1,6 @@
 export const ChooseSource = ({ setSource }) => {
   const handleSpotifyClick = () => {
-    const baseURL = process.env.REACT_APP_PROXY_SPOTIFY_URL;
+    const baseURL = import.meta.env.VITE_PROXY_SPOTIFY_URL;
     const url = `${baseURL}/auth`;
 
     try {
