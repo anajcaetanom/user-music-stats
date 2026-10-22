@@ -1,16 +1,16 @@
 import { useData } from '../../../shared/context/DataContext';
 
+const timespanMap = {
+  '7day': 'last week',
+  '1month': 'last month',
+  '6month': 'last 6 months',
+  '12month': 'last year',
+};
+
 export const LastFmCharts = ({ charts }) => {
   const { username, timespan, category, profilePic } = useData();
 
   const usernameFormatado = username.charAt(0).toUpperCase() + username.slice(1);
-
-  const timespanMap = {
-    '7day': 'last week',
-    '1month': 'last month',
-    '6month': 'last 6 months',
-    '12month': 'last year',
-  };
 
   return (
     <div>
